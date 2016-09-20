@@ -52,6 +52,18 @@
 					</div>
 					<p class="error-text">{{ error_group }}</p>
 				</div>
+				
+				<div class="form-group">
+					<label class="control-label col-sm-2">Imagen</label>
+					<div class="col-md-10">
+						<img id="image" src="http://placehold.it/250x250" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<input type="file" name="pic" accept="image/*" id="files" class="little-padding">
+					</div>
+				</div>
 				<div class="form-group"> 
 					<div class="col-sm-offset-2 col-sm-10">
 					  <button type="submit" class="btn btn-default center-block">Submit</button>
@@ -60,5 +72,22 @@
 			</form>
 		</div>
 	</div>
+
+	<script type="text/javascript">
+		/* code snippet for show image before upload */
+		document.getElementById("files").onchange = function () {
+		var reader = new FileReader();
+
+		reader.onload = function (e) {
+		    // get loaded data and render thumbnail.
+		    document.getElementById("image").src = e.target.result;
+		};
+
+		// read the image file as a data URL.
+		reader.readAsDataURL(this.files[0]);
+		};
+	</script>
 {% endblock %}
+
+
 
