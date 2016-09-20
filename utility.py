@@ -8,6 +8,7 @@ import logging
 import time
 from google.appengine.ext import db
 from models.user_model import *
+
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
 from google.appengine.api import memcache
@@ -60,7 +61,7 @@ def get_posts(update = False) :
     if posts is None or update :
         logging.error("DBQUERY")
         # getting post from the database
-        posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10 ")
+        posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10")
         posts = list(posts)
         # saving the last time query to the database
         memcache.set("time_last_query", time.time()) 
@@ -71,7 +72,7 @@ def get_posts(update = False) :
 def get_permalink(post_id, update = False) :
     #cache reference memcache[postid] = [post, time]
     # create key from id
-    key = db.Key.from_path('Blog', int(post_id))
+    key = db.Key.from_path('Blog', int(post_id), parent = ancestor_key)
     cache_key = str(key)
     # look for the post in the cache
     post = memcache.get(cache_key)
@@ -85,3 +86,7 @@ def get_permalink(post_id, update = False) :
         # if exists the post in the cache take it
         post = memcache.get(cache_key)[0]
     return post
+
+# date to string
+def date_to_string(date):
+    return date.strftime('%a %b %m %X %Y')

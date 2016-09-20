@@ -10,7 +10,7 @@ class NewpostHandler(Handler) :
 		content = self.request.get("content")
 		error = ""
 		if subject and content :
-			post = Blog(subject = subject, content = content)
+			post = Blog(subject = subject, content = content, parent = ancestor_key)
 			post.put()
 			# Updating the Cache when writing
 			get_posts(True)
