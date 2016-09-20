@@ -16,13 +16,15 @@ class SignupHandler(Handler):
 		username = self.request.get("username")
 		password = self.request.get("password")
 		verify = self.request.get("verify")
-		email = self.request.get("email") 
+		email = self.request.get("email")
+		group = int(self.request.get("group")) 
 		# error variables
 		error_username = ""
 		error_password = ""
 		error_verify = ""
 		error_email = ""
 		error_exits = ""
+		error_group = ""
 		# flag for errors
 		cond_error = False
 		# getting user from database. get for take the first colunn
@@ -35,6 +37,8 @@ class SignupHandler(Handler):
 			if not self.validate_user(username) :
 				error_username = "That's not a Valid User"
 				cond_error = True
+			if not self.validate_group(group) :
+				error_group = "That's not a Valid Group"
 			if not self.validate_password(password):
 				error_password = "That's not a Valid Password"
 				cond_error = True
@@ -50,7 +54,7 @@ class SignupHandler(Handler):
 			# generating password hash
 			password = make_password_hash(username, password)
 			# creating a new instance of the object
-			user = User(username=username, password = password, email = email)
+			user = User(username=username, password = password, email = email, group = group)
 			# saving data in the database
 			user.put()
 			self.login(user)
@@ -62,7 +66,8 @@ class SignupHandler(Handler):
 							error_email = error_email, 
 							username = username, 
 							email = email,
-							error_exits = error_exits
+							error_exits = error_exits,
+							error_group = error_group
 							)
 
 	# validates functions
@@ -74,3 +79,8 @@ class SignupHandler(Handler):
 
 	def validate_email(self, email) :
 		return email_check.match(email)
+
+	def validate_group(self, group) :
+		if group == 0 or group == 1 or group == 2 or group == 3 :
+			return True
+		return False
