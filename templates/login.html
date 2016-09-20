@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-</head>
-<body>
-	<div class="container">
+{% extends "base.html" %}
+{% block title %} Login {% endblock %}
+
+{% block content %}
+
 		<div class="row">
 			<div class="col-md-6 center-block">
 				<h2 class="text-center">Log-In</h2>
@@ -33,7 +26,8 @@
 				</div>
 			</div>
 		</div>
-	</div>
-</body>
-</html>
+
+{% endblock %}
+	
+
 

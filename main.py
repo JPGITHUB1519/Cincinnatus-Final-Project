@@ -15,8 +15,20 @@
 # limitations under the License.
 #
 import webapp2
-from handlers.test_handler import * 
+from handlers.main_handler import * 
+from handlers.login_handler import *
+from handlers.signup_handler import *
+from handlers.welcome_handler import *
+from handlers.logout_handler import *
+from handlers.newpost_handler import *
+from handlers.permalink_handler import *
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/login/?', LoginHandler),
+    ('/signup/?', SignupHandler),
+    ('/welcome/?', WelcomeHandler),
+    ('/logout/?', LogoutHandler),
+    ('/newpost/?', NewpostHandler),
+    ('/([0-9]+)/?', PermalinkHandler)
 ], debug=True)

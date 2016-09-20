@@ -1,0 +1,134 @@
+/* ==========================================================================
+   Text-clases
+   ========================================================================== 
+*/
+
+.text-beatiful-red
+{
+	color: #CC4C43;
+}
+
+.text-beatiful-blue
+{
+	color: #2a03f4;
+}
+
+.text-black
+{
+	color: #000000;
+}
+
+.font-pacifico
+{
+	font-family: 'Pacifico', cursive;
+}
+
+.error-text
+{
+    color: #cc0000;
+    font-size : 1.5em;
+}
+
+.font-lobster
+{
+	font-family: 'Lobster', cursive;
+}
+
+.text-semi-large
+{
+	font-size: 1.5em;
+}
+
+/* ==========================================================================
+   Block-clases
+   ========================================================================== 
+*/
+
+body
+{
+	background-color: #ECEBE7;
+	font-family: 'Lato', sans-serif;
+}
+
+.date
+{
+	background-color: black;
+	color : white;
+}
+
+/* ==========================================================================
+   Center - Stuffs
+   ========================================================================== 
+*/
+
+.text-center
+{
+    text-align: center;
+}
+
+.center-block
+{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    float: none !important;
+}
+
+
+/* ==========================================================================
+   Only - Classes
+   ========================================================================== 
+*/
+
+.text-center-only-small
+{
+	text-align: center;
+}
+
+.visible-only-mobile
+{
+	display: block;
+}
+
+.visible-only-large
+{
+	display: none;
+}
+
+/* ==========================================================================
+   Utilities Classes
+   ========================================================================== 
+*/
+
+.little-padding
+{
+	margin : 0.5em;
+}
+
+/* ==========================================================================
+   Responsive Media Queries
+   ========================================================================== 
+*/
+
+@media only screen and (min-width: 768px) 
+{
+    /* For tablets: */
+
+    .text-center-only-small
+    {
+    	text-align: initial;
+    }
+    .visible-only-mobile
+    {
+    	display: none;
+    }
+
+}
+@media only screen and (min-width: 992px) 
+{
+    /* For desktop: */
+    .visible-only-large
+    {
+    	display: block;
+    }
+}

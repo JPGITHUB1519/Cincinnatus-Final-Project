@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} Permalink {% endblock %}
+{% block content %}
+	<div class="row">
+		<div class="col-md-1 date text-center visible-only-large">
+			<p>Sept</p>
+			<p>19</p>
+		</div>
+		<div class="col-md-10">
+			<h1 class="text-beatiful-red font-lobster">{{ p.subject }}</h1>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-6">
+			<p class="font-pacifico text-semi-large text-center-only-small" >Written by Jean Ure&ntilde;a</p>
+		</div>
+		<div class="col-sm-6">
+			<p class="text-semi-large text-beatiful-blue text-center-only-small">Topic : <span class="text-black">Tecnology</span></p>
+		</div>	
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<p>{{ p.content }}</p>
+		</div>
+	</div>
+{% endblock %}

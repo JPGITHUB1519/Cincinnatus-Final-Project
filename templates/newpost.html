@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %} New Post {% endblock %}
+
+{% block content %}
+
+	<div class="row">
+		<div class="col-xs-12 col-md-6 center-block">
+			<form method="post">
+				<div class="form-group">
+					<label>Subject</label>
+					<input type="text" name="subject" class="form-control" placeholder="subject">
+				</div>
+				<div class="form-group">
+					<label>Content</label>
+					<textarea class="form-control" name = "content"></textarea>
+				</div>
+				<input type="submit" name="" class="btn btn-default center-block">
+				<h2 class="text-center error-text">{{ error }}</h2>
+			</form>
+		</div>
+	</div>
+
+{% endblock %}
