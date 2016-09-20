@@ -18,5 +18,5 @@ import webapp2
 from handlers.test_handler import * 
 
 app = webapp2.WSGIApplication([
-    ('/', TestHandler)
+    ('/', MainHandler)
 ], debug=True)
