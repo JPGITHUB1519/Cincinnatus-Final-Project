@@ -5,6 +5,7 @@ import re
 import general
 import hashlib
 import logging
+import time
 from google.appengine.ext import db
 from models.user_model import *
 ancestor_key = db.Key.from_path('User', 'some_id')
@@ -61,6 +62,8 @@ def get_posts(update = False) :
         # getting post from the database
         posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10 ")
         posts = list(posts)
+        # saving the last time query to the database
+        memcache.set("time_last_query", time.time()) 
         # updating cache
         memcache.set(key, posts)
     return posts
@@ -76,8 +79,9 @@ def get_permalink(post_id, update = False) :
         logging.error("DBQUERY")
         # obtain the model from the key
         post = db.get(key)
-        memcache.set(cache_key, post)
+        query_time = time.time()
+        memcache.set(cache_key, [post, query_time])
     else :
         # if exists the post in the cache take it
-        post = memcache.get(cache_key)
+        post = memcache.get(cache_key)[0]
     return post

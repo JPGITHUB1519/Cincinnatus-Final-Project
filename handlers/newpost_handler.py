@@ -13,9 +13,9 @@ class NewpostHandler(Handler) :
 			post = Blog(subject = subject, content = content)
 			post.put()
 			# Updating the Cache when writing
-			# get_posts(True)
-			# # redirecting with the key of the new post
-			# self.redirect('/blog/%s' % str(post.key().id()))
+			get_posts(True)
+			# redirecting with the key of the new post
+			self.redirect('/%s' % str(post.key().id()))
 		else :
 			error= "YOU MUST FILL ALL THE FIELDS" 
 			self.render("newpost.html", error = error, 
