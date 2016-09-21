@@ -25,6 +25,7 @@ from handlers.permalink_handler import *
 from handlers.main_json_handler import *
 from handlers.permalink_json_handler import *
 from handlers.flushcache_handler import *
+from handlers.imgserve_handler import *
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -36,5 +37,6 @@ app = webapp2.WSGIApplication([
     ('/newpost/?', NewpostHandler),
     ('/([0-9]+)/?', PermalinkHandler),
     ('/([0-9]+).json', PermalinkJsonHandler),
-    ('/flush/?', FlushcacheHandler)
+    ('/flush/?', FlushcacheHandler),
+    ('/img_serve/([0-9]+)', ImgServe)
 ], debug=True)

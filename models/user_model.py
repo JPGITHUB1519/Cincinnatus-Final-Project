@@ -6,6 +6,8 @@ class User(db.Model) :
 	date = db.DateProperty(auto_now_add=True)
 	# User Group
 	group = db.IntegerProperty(required = True)
+	avatar = db.BlobProperty()
+	avatar_filename = db.StringProperty()
 	# group 
 	# 0 -> reading
 	# 1 -> writing

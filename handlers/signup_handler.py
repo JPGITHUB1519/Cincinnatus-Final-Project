@@ -5,6 +5,8 @@ from basic_handler import *
 from models.user_model import User
 from general import * 
 from google.appengine.ext import db
+# image api
+from google.appengine.api import images
 
 
 class SignupHandler(Handler):
@@ -18,6 +20,10 @@ class SignupHandler(Handler):
 		verify = self.request.get("verify")
 		email = self.request.get("email")
 		group = int(self.request.get("group")) 
+		avatar = self.request.POST.get("pic", None)
+		avatar_filename = avatar.filename
+		avatar_route = self.request.get("image_route")
+		# avatar = images.resize(avatar, 32, 32)
 		# error variables
 		error_username = ""
 		error_password = ""
@@ -54,7 +60,7 @@ class SignupHandler(Handler):
 			# generating password hash
 			password = make_password_hash(username, password)
 			# creating a new instance of the object
-			user = User(username=username, password = password, email = email, group = group)
+			user = User(username=username, password = password, email = email, group = group, avatar = avatar.file.read(), avatar_filename = avatar_filename)
 			# saving data in the database
 			user.put()
 			self.login(user)
@@ -67,7 +73,8 @@ class SignupHandler(Handler):
 							username = username, 
 							email = email,
 							error_exits = error_exits,
-							error_group = error_group
+							error_group = error_group,
+							avatar_route = avatar_route
 							)
 
 	# validates functions
