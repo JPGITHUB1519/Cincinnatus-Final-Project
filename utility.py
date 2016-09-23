@@ -9,6 +9,7 @@ import time
 from google.appengine.ext import db
 from models.user_model import *
 from models.category_model import *
+from models.blog_model import *
 
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
@@ -62,7 +63,9 @@ def get_posts(update = False) :
     if posts is None or update :
         logging.error("DBQUERY")
         # getting post from the database
-        posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10")
+        # posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10")
+        posts = Blog.all().order("-date")
+        posts.ancestor(ancestor_key)
         posts = list(posts)
         # saving the last time query to the database
         memcache.set("time_last_query", time.time()) 
