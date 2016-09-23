@@ -23,6 +23,8 @@ class NewpostHandler(Handler) :
 			if not new_category :
 				# category_key = db.Key.from_path("Category", int(category), parent = ancestor_key)
 				category_entity = Category.get_by_id(int(category))
+				# cr = Category(name = "Math")
+				# cr.put()
 				post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), parent = ancestor_key)
 			else :
 				cat = Category(name = new_category, parent = ancestor_key)
