@@ -104,11 +104,25 @@ body
 {
 	padding : 0.5em;
 }
+.little-margin-top
+{
+  margin-top: 1.5em;
+}
 
 #image
 {
   max-width: 250px;
   max-height: 250px;
+}
+
+.invisible
+{
+  display: none !important;
+}
+
+.visible
+{
+  display: block !important;
 }
 
 /* ==========================================================================

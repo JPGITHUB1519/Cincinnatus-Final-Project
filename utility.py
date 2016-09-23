@@ -8,6 +8,7 @@ import logging
 import time
 from google.appengine.ext import db
 from models.user_model import *
+from models.category_model import *
 
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
@@ -68,6 +69,9 @@ def get_posts(update = False) :
         # updating cache
         memcache.set(key, posts)
     return posts
+
+def get_category():
+        return list(Category.all())
 
 def get_permalink(post_id, update = False) :
     #cache reference memcache[postid] = [post, time]
