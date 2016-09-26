@@ -51,6 +51,7 @@ def check_secure_val(h):
     	return lista[0]
     return None
 
+# database stuffs
 def get_posts(update = False) :
     """ 
         This obtain the post from the Cache. The Cache is always update
@@ -74,7 +75,34 @@ def get_posts(update = False) :
     return posts
 
 def get_category():
-        return list(Category.all())
+    """
+        return all categories
+    """
+    return list(Category.all())
+
+def post_by_category(category):
+    """
+        returns posts filter by one categorie
+    """
+    post = Blog.all().filter('category =', category.key())
+    logging.error(post)
+    return list(post)
+
+# number of post by topic
+def numpost_by_categories():
+    """
+        it returns a dictionary with the topics and its numbers of pos
+    t"""
+    topics = get_category()
+    data = {}
+    if topics :
+        for topic in topics :
+            post = post_by_category(topic)
+            data[topic.name] = len(post)
+        logging.error(data)
+        return data
+    else :
+        return None
 
 def get_permalink(post_id, update = False) :
     #cache reference memcache[postid] = [post, time]
@@ -97,3 +125,4 @@ def get_permalink(post_id, update = False) :
 # date to string
 def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
+
