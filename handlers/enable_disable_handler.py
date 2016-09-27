@@ -27,6 +27,10 @@ class EnableDisableHandler(Handler):
 				else :
 					post.status = True
 					response["status"] = "true"
+				# updating cache
+				# this is a force change it!
+				#memcache.flush_all()
+				get_posts(True)
 				post.put()
 				self.write(json.dumps(response))
 			else :

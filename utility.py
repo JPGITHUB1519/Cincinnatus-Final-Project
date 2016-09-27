@@ -65,8 +65,7 @@ def get_posts(update = False) :
         logging.error("DBQUERY")
         # getting post from the database
         # posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10")
-        posts = Blog.all().order("-date")
-        posts.ancestor(ancestor_key)
+        posts = Blog.all().filter("status =", True).order("-date").ancestor(ancestor_key)
         posts = list(posts)
         # saving the last time query to the database
         memcache.set("time_last_query", time.time()) 
