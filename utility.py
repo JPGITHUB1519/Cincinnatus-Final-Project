@@ -74,22 +74,33 @@ def get_posts(update = False) :
         memcache.set(key, posts)
     return posts
 
-def get_category():
-    """
-        return all categories
-    """
-    return list(Category.all())
-
+# post actions
 def post_by_category(category):
     """
         returns posts filter by one categorie
     """
     post = Blog.all().filter('category =', category.key())
-    logging.error(post)
+    return list(post)
+
+def post_by_user(user):
+    post = Blog.all().filter('user =', user.key())
+    return list(post)
+
+# get post by id
+def post_by_id(id):
+    post = Blog.get_by_id(int(id), parent = ancestor_key)
+    return post
+
+# filter by user and category
+def post_by_category_and_user(category, user):
+    """
+        returns posts filter by one categorie
+    """
+    post = Blog.all().filter('category =', category.key()).filter('user = ', user.key())
     return list(post)
 
 # number of post by topic
-def numpost_by_categories():
+def numpost_by_categories(user):
     """
         it returns a dictionary with the topics and its numbers of pos
     t"""
@@ -97,12 +108,17 @@ def numpost_by_categories():
     data = {}
     if topics :
         for topic in topics :
-            post = post_by_category(topic)
+            post = post_by_category_and_user(topic, user)
             data[topic.name] = len(post)
-        logging.error(data)
         return data
     else :
         return None
+#category actions
+def get_category():
+    """
+        return all categories
+    """
+    return list(Category.all())
 
 def get_permalink(post_id, update = False) :
     #cache reference memcache[postid] = [post, time]

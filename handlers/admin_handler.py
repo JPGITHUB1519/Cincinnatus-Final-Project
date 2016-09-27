@@ -4,12 +4,7 @@ import json
 
 class AdminHandler(Handler):
 	def get(self):
-		data = numpost_by_categories()
-		data_numbers = []
-		data_keys = []
-		for key in data :
-			data_numbers.append(data[key])
-			data_keys.append(key)
-		# to pass a list to javascript, we have to pass it as a json
-		self.render("admin.html", data = data, data_numbers = data_numbers, data_json = json.dumps(data))
-
+		# dictionary getting post data by categories
+		dic_posts = numpost_by_categories(self.user)
+		list_posts = post_by_user(self.user)
+		self.render("admin.html", data_json = json.dumps(dic_posts), dic_posts = dic_posts, list_posts = list_posts)

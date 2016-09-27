@@ -4,7 +4,12 @@ import time
 
 class PermalinkHandler(MainHandler):
     def get(self, post_id):
-    	post = get_permalink(post_id)
+    	update = self.request.get("p")
+    	# if update is true query the cache and show the new post else load from cache
+    	if update == "true" :
+    		post = get_permalink(post_id, True)
+    	else :
+    		post = get_permalink(post_id)
     	key = str(db.Key.from_path('Blog', int(post_id), parent  = ancestor_key))
         query_time = time.time() - memcache.get(key)[1] 
         if not post:

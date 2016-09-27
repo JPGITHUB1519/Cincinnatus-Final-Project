@@ -3,6 +3,7 @@ from utility import *
 from models.blog_model import *
 from models.category_model import *
 from general import *
+import logging
 
 
 class NewpostHandler(Handler) :
@@ -10,7 +11,15 @@ class NewpostHandler(Handler) :
 		# a = Category(name = "Tec", description = "Tecnology")
 		# a.put()
 		category_list = get_category()
-		self.render("newpost.html", category_list = category_list)
+		edit_post_id = self.request.get("p") 
+		# if send id in the url, edit it!
+		if edit_post_id :
+			post = post_by_id(edit_post_id)
+			self.render("newpost.html", 
+						category_list = category_list, 
+						subject = post.subject, 
+						content = post.content,
+						category = post.category)
 
 	def post(self) :
 		subject = self.request.get("subject")
@@ -18,27 +27,35 @@ class NewpostHandler(Handler) :
 		category = self.request.get("category")
 		new_category = self.request.get("new_category")
 		error = ""
+		edit_post_id = self.request.get("p") 
 		if subject and content :
 			# if select a category already made
-			if not new_category :
-				# category_key = db.Key.from_path("Category", int(category), parent = ancestor_key)
-				category_entity = Category.get_by_id(int(category))
-				# cr = Category(name = "Math")
-				# cr.put()
-				post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), parent = ancestor_key)
+			if edit_post_id :
+				post = post_by_id(edit_post_id)
+				post.subject = subject
+				post.content = content
+				post.put()
+				# Updating the Cache when writing
+				get_posts(True)
+				# redirecting with the key of the new post
+				self.redirect('/%s' % str(post.key().id()) + "?p=true")
 			else :
-				cat = Category(name = new_category, parent = ancestor_key)
-				cat.put()
-				post = Blog(subject = subject, content = content, category = cat.key(), user = self.user.key(), parent = ancestor_key)
-
-			# if category == "other" :
-				
-			# 	post = Blog(subject = subject, content = content, category = new_category, parent = ancestor_key)
-			post.put()
-			# Updating the Cache when writing
-			get_posts(True)
-			# redirecting with the key of the new post
-			self.redirect('/%s' % str(post.key().id()))
+				if not new_category :
+					# category_key = db.Key.from_path("Category", int(category), parent = ancestor_key)
+					category_entity = Category.get_by_id(int(category))
+					# cr = Category(name = "Math")
+					# cr.put()
+					# error on take category
+					post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), parent = ancestor_key)
+				else :
+					cat = Category(name = new_category, parent = ancestor_key)
+					cat.put()
+					post = Blog(subject = subject, content = content, category = cat.key(), user = self.user.key(), parent = ancestor_key)
+				post.put()
+				# Updating the Cache when writing
+				get_posts(True)
+				# redirecting with the key of the new post
+				self.redirect('/%s' % str(post.key().id()))
 		else :
 			error= "YOU MUST FILL ALL THE FIELDS" 
 			self.render("newpost.html", error = error, 

@@ -8,27 +8,79 @@
 			<canvas id="myChart"></canvas>
 		</div>
 	</div>
+	<div class="row">
+		<div class="small-12">
+			<h3 class="text-center">Post Administration</h3>
+		</div>
+	</div>
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<thead>
+					<tr>
+						<td>Subject</td>
+						<td>Content</td>
+						<td>Date</td>
+						<td>Category</td>
+						<td>Update</td>
+						<td>Disable</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for data in list_posts %}
+						<tr class="active">
+							<td>{{ data.subject }}</td>
+							<td>{{ data.content }}</td>
+							<td>{{ data.date }}</td>
+							<td>{{ data.category.name }}</td>
+							<td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
+							<td><a href="#" value="{{data.key().id()}}">Disable</a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</thead>
+		</table>
+	</div>
+
+
 	<script type="text/javascript">
-		/* function to get keys from a json */
+		/* function to get keys and values from a json sended by the server */
 		function get_keys(json_data)
 		{
 			keys = []
+			values = []
 			for(data in json_data)
 			{
-				keys.push(data)
+				// if the category is not empty 
+				if (json_data[data] > 0) 
+				{
+					keys.push(data)
+					values.push(json_data[data]);
+				} 	
 			}
-			console.log(keys);
-			return keys
+			console.log(keys, values);
+			return [keys, values];
 		}
+		/* getting data from the server to the chart **/
+		var data_keys;
+		var data;
+		data_keys = get_keys({{data_json | safe}})[0]
+		data = get_keys({{data_json | safe}})[1]
+		console.log(data_keys)
+		console.log(data)
 		var ctx = document.getElementById("myChart");
 		var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
 			/* pass the data as a json */
-		    labels: get_keys({{data_json | safe}}) ,
+		    labels:  data_keys,
 		    datasets: [{
 		        label: '# Post by Topic',
-		        data: {{data_numbers}},
+		        data: data,
+		        scaleOverride: true,
+    scaleStepWidth: 1,
+    scaleStartValue: 0,
+    showLegend: true,
 		        backgroundColor: [
 		            'rgba(255, 99, 132, 0.2)',
 		            'rgba(54, 162, 235, 0.2)',
@@ -45,7 +97,7 @@
 		            'rgba(153, 102, 255, 1)',
 		            'rgba(255, 159, 64, 1)'
 		        ],
-		        borderWidth: 1,
+		        borderWidth: 1
 		    }]
 		},
 		options: {
