@@ -10,6 +10,6 @@ class AdminHandler(Handler):
 		for key in data :
 			data_numbers.append(data[key])
 			data_keys.append(key)
-		
-		self.render("admin.html", data = data, data_numbers = data_numbers, data_keys = data_keys, data_json = json.dumps(data))
+		# to pass a list to javascript, we have to pass it as a json
+		self.render("admin.html", data = data, data_numbers = data_numbers, data_json = json.dumps(data))
 

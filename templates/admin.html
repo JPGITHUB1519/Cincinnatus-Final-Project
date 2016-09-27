@@ -9,20 +9,23 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+		/* function to get keys from a json */
 		function get_keys(json_data)
 		{
 			keys = []
-			for(data in get_keys)
+			for(data in json_data)
 			{
 				keys.push(data)
 			}
+			console.log(keys);
 			return keys
 		}
 		var ctx = document.getElementById("myChart");
 		var myChart = new Chart(ctx, {
 		type: 'bar',
 		data: {
-		    labels: ["math", "key"] ,
+			/* pass the data as a json */
+		    labels: get_keys({{data_json | safe}}) ,
 		    datasets: [{
 		        label: '# Post by Topic',
 		        data: {{data_numbers}},
