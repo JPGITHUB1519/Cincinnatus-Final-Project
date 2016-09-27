@@ -20,6 +20,9 @@ class NewpostHandler(Handler) :
 						subject = post.subject, 
 						content = post.content,
 						category = post.category)
+		else :
+			self.render("newpost.html", 
+						category_list = category_list)
 
 	def post(self) :
 		subject = self.request.get("subject")
@@ -46,11 +49,11 @@ class NewpostHandler(Handler) :
 					# cr = Category(name = "Math")
 					# cr.put()
 					# error on take category
-					post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), parent = ancestor_key)
+					post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), status = True, parent = ancestor_key)
 				else :
 					cat = Category(name = new_category, parent = ancestor_key)
 					cat.put()
-					post = Blog(subject = subject, content = content, category = cat.key(), user = self.user.key(), parent = ancestor_key)
+					post = Blog(subject = subject, content = content, category = cat.key(), user = self.user.key(), status = True, parent = ancestor_key)
 				post.put()
 				# Updating the Cache when writing
 				get_posts(True)

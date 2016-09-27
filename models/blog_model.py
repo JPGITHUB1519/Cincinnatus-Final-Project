@@ -11,5 +11,6 @@ class Blog(db.Model) :
 	user = db.ReferenceProperty(User)
 	# auto now is for overwriting a existed date if it exits
 	last_modified = db.DateProperty(auto_now = True)
+	status = db.BooleanProperty()
 
 

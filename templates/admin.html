@@ -28,13 +28,17 @@
 				</thead>
 				<tbody>
 					{% for data in list_posts %}
-						<tr class="active">
+						<tr>
 							<td>{{ data.subject }}</td>
 							<td>{{ data.content }}</td>
 							<td>{{ data.date }}</td>
 							<td>{{ data.category.name }}</td>
 							<td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
-							<td><a href="#" value="{{data.key().id()}}">Disable</a></td>
+							{% if data.status == True %}
+								<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text">Disable</a></td>
+							{% else %}
+								<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
+							{% endif %}
 						</tr>
 					{% endfor %}
 				</tbody>
@@ -58,7 +62,6 @@
 					values.push(json_data[data]);
 				} 	
 			}
-			console.log(keys, values);
 			return [keys, values];
 		}
 		/* getting data from the server to the chart **/
@@ -66,8 +69,6 @@
 		var data;
 		data_keys = get_keys({{data_json | safe}})[0]
 		data = get_keys({{data_json | safe}})[1]
-		console.log(data_keys)
-		console.log(data)
 		var ctx = document.getElementById("myChart");
 		var myChart = new Chart(ctx, {
 		type: 'bar',
@@ -111,6 +112,47 @@
 		    }
 		}
 		});
+
+		// ajax call
+		function enable_disable_ajax(post_id)
+		{
+			$.ajax(
+			{
+				type : "POST",
+				url : "/change_status",
+				contentType: 'application/json',
+				datatype : "json",
+				// sent json to the server
+				data : JSON.stringify({"post_id" : post_id}),
+			})
+			.done(function(data)
+			{
+				var link_id = "#" + post_id 
+				console.log(data["status"]);
+				//json_reponse
+				if(data["status"] == "true")
+				{
+
+					$(link_id).text("Disable");
+					$(link_id).addClass("error-text");
+					$(link_id).addClass("little-text");
+					// quit focus when ajax
+					$(link_id).blur();
+				}
+				else if(data["status"] == "false")
+				{
+					$(link_id).text("Enable");
+					$(link_id).removeClass("error-text");
+					$(link_id).blur();
+				}
+			})
+			.fail(function(textStatus)
+			{
+				console.log(textStatus);
+			});
+
+			return;
+		}
 	</script>
 	
 
