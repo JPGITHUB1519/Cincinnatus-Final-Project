@@ -3,12 +3,14 @@ from utility import *
 import json
 import logging
 class EnableDisableHandler(Handler):
+	"""
+		Handler to answer the request from the client javascript ajax call
+	"""
 	def get(self):
 		self.response.headers['Content-Type'] = 'application/json'
 		self.write(json.dumps({"data" : "number"}))
 	def post(self):
-		# self.response.headers['Content-Type'] = 'application/json'
-		# self.write(json.dumps({"data" : "number post"}))
+		# takes the json request and answer json
 		self.response.headers['Content-Type'] = 'application/json'
 		data = json.loads(self.request.body);
 		error = False
@@ -30,8 +32,8 @@ class EnableDisableHandler(Handler):
 				# updating cache
 				# this is a force change it!
 				#memcache.flush_all()
-				get_posts(True)
 				post.put()
+				get_posts(True)
 				self.write(json.dumps(response))
 			else :
 				response = {"error" : "This Post was not found in the database"}
