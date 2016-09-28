@@ -8,21 +8,24 @@ import logging
 
 class NewpostHandler(Handler) :
 	def get(self) :
-		# a = Category(name = "Tec", description = "Tecnology")
-		# a.put()
-		category_list = get_category()
-		edit_post_id = self.request.get("p") 
-		# if send id in the url, edit it!
-		if edit_post_id :
-			post = post_by_id(edit_post_id)
-			self.render("newpost.html", 
-						category_list = category_list, 
-						subject = post.subject, 
-						content = post.content,
-						category = post.category)
+		if self.user.group > 0 : 
+			# a = Category(name = "Tec", description = "Tecnology")
+			# a.put()
+			category_list = get_category()
+			edit_post_id = self.request.get("p") 
+			# if send id in the url, edit it!
+			if edit_post_id :
+				post = post_by_id(edit_post_id)
+				self.render("newpost.html", 
+							category_list = category_list, 
+							subject = post.subject, 
+							content = post.content,
+							category = post.category)
+			else :
+				self.render("newpost.html", 
+							category_list = category_list)
 		else :
-			self.render("newpost.html", 
-						category_list = category_list)
+			self.write("You have not Permission to access this page because you are a only reader User")
 
 	def post(self) :
 		subject = self.request.get("subject")

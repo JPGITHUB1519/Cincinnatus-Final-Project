@@ -1,0 +1,19 @@
+0 - reading
+1 - writing
+2 - reading/writing
+3- full
+
+
+acciones			tipo usuario
+
+signup				None
+login				ALL Types
+newpost				writing/full
+comment				writing/full
+blog/allpost		reading/full
+listado-usuarios	Full
+graficos			ALL TYPES
+
+
+to do
+listado-usuarios	Full
