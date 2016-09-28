@@ -11,7 +11,11 @@ from google.appengine.api import images
 
 class SignupHandler(Handler):
 	def get(self):
-		self.render("signup.html")
+		# if the user not logged
+		if not self.user :
+			self.render("signup.html")
+		else :
+			self.redirect("/")
 
 	def post(self):
 		# getting data from form

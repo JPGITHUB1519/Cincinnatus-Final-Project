@@ -2,7 +2,11 @@ from basic_handler import *
 
 class LoginHandler(Handler):
 	def get(self):
-		self.render("login.html")
+		# if the user not logged
+		if not self.user :
+			self.render("login.html")
+		else :
+			self.redirect("/")
 	def post(self):
 		username = self.request.get("username")
 		password = self.request.get("password")
