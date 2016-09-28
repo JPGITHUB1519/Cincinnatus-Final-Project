@@ -8,6 +8,6 @@ class MainHandler(Handler):
 			lista_post = get_posts()
 			seconds_last = time.time() - memcache.get("time_last_query")
 			QUERIED = "queried %s seconds ago" % int(seconds_last)
-			self.render("index.html", lista_post = lista_post, QUERIED = QUERIED)
+			self.render("index.html", lista_post = lista_post, QUERIED = QUERIED, username = self.user.username)
 		else :
 			self.write("You have not Permission to access this page because you are a only Writer User")

@@ -16,11 +16,12 @@ class NewpostHandler(Handler) :
 			# if send id in the url, edit it!
 			if edit_post_id :
 				post = post_by_id(edit_post_id)
-				self.render("newpost.html", 
+				self.render("newpost.html",
 							category_list = category_list, 
 							subject = post.subject, 
 							content = post.content,
-							category = post.category)
+							category = post.category,
+							username = self.user.username)
 			else :
 				self.render("newpost.html", 
 							category_list = category_list)
