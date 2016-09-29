@@ -119,6 +119,10 @@ def get_category():
     """
     return list(Category.all())
 
+def category_by_id(category_id):
+    category_entity = Category.get_by_id(int(category_id), parent = ancestor_key)
+    return category_entity
+
 def get_permalink(post_id, update = False) :
     #cache reference memcache[postid] = [post, time]
     # create key from id

@@ -16,17 +16,22 @@
 				</div>
 				<div class="row">
 					<div class="col-xs-4">
-						<label>Category</label>
+						<label class="visible">Category</label>
 						<select name="category" id="category">
-							{% for category in category_list %}
-								<option value="{{ category.key().id() }}">{{ category.name }}</option>
+							{% for category_entity in category_list %}
+								<!-- put default category if it has been taken -->
+								{% if category_entity.name == category.name %}
+									<option value="{{ category_entity.key().id() }}" selected>{{ category_entity.name }}</option>
+								{% else %}
+									<option value="{{ category_entity.key().id() }}">{{ category_entity.name }}</option>
+								{% endif %}
 							{% endfor %}
 							<option value="other">other</option>
 						</select>
 					</div>
 					<div class="col-xs-8 invisible" id="new_category">
-						<label>New Category</label>
-						<input type="" name="new_category">
+						<label class="visible">New Category</label>
+						<input id="new_category_text" type="" name="new_category">
 					</div>
 				</div>
 				<div class="row little-margin-top">
@@ -39,19 +44,31 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+
 		$(document).ready(function(){
+			// function to ask if the user will put a new category
+			// it show/hide the new category input
+			function ask_category()
+			{
+				if($("#category").val() == "other")
+				{
+					$("#new_category").removeClass("invisible");
+					$("#new_category").addClass("visible");
+				}
+				else
+				{
+					$("#new_category_text").val("");
+					$("#new_category").addClass("invisible");
+					$("#new_category").removeClass("visible");
+					// putting a null value when hiding
+					
+				}
+			}
+			// ask on load
+			ask_category()
 			// show/hide new category
 			$("#category").change(function(){
-			    if($(this).val() == "other")
-			    {
-			    	$("#new_category").removeClass("invisible");
-			    	$("#new_category").addClass("visible");
-			    }
-			    else
-			    {
-			    	$("#new_category").addClass("invisible");
-			    	$("#new_category").removeClass("visible");
-			    }
+			    ask_category()
 			});
 		});
 	</script>

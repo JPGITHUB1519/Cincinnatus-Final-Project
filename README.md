@@ -17,6 +17,7 @@ Here, we created a Blog Engine.
 
 	- Bootstrap v3.3.7
 	- jQuery v3.1.0
+	- Chart.js
 
 ### Back - End
 

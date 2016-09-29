@@ -24,7 +24,11 @@ class NewpostHandler(Handler) :
 							username = self.user.username)
 			else :
 				self.render("newpost.html", 
-							category_list = category_list)
+							category_list = category_list,
+							subject = "",
+							content = "",
+							category = "", 
+							username = self.user.username)
 		else :
 			self.write("You have not Permission to access this page because you are a only reader User")
 
@@ -35,29 +39,22 @@ class NewpostHandler(Handler) :
 		new_category = self.request.get("new_category")
 		error = ""
 		edit_post_id = self.request.get("p") 
+		category_list = get_category()
 		if subject and content :
 			# if select a category already made
 			if edit_post_id :
 				post = post_by_id(edit_post_id)
 				post.subject = subject
 				post.content = content
+				post.category = self.check_get_category(category, new_category)
 				post.put()
 				# Updating the Cache when writing
 				get_posts(True)
 				# redirecting with the key of the new post
 				self.redirect('/%s' % str(post.key().id()) + "?p=true")
 			else :
-				if not new_category :
-					# category_key = db.Key.from_path("Category", int(category), parent = ancestor_key)
-					category_entity = Category.get_by_id(int(category))
-					# cr = Category(name = "Math")
-					# cr.put()
-					# error on take category
-					post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), status = True, parent = ancestor_key)
-				else :
-					cat = Category(name = new_category, parent = ancestor_key)
-					cat.put()
-					post = Blog(subject = subject, content = content, category = cat.key(), user = self.user.key(), status = True, parent = ancestor_key)
+				category_entity = self.check_get_category(category, new_category)
+				post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), status = True, parent = ancestor_key)
 				post.put()
 				# Updating the Cache when writing
 				get_posts(True)
@@ -68,4 +65,24 @@ class NewpostHandler(Handler) :
 			self.render("newpost.html", error = error, 
 										subject = subject,
 										content  = content,
-										category_list = category_list)
+										category = category,
+										category_list = category_list,
+										username = self.user)
+
+	def check_get_category(self, category, new_category):
+		""""
+			return the post category
+			if the category exits look for it in the db and return it
+			else create a new one category and return it!
+		"""
+		if category != "other" and not new_category :
+			# category_key = db.Key.from_path("Category", int(category), parent = ancestor_key)
+			category_entity = category_by_id(category)
+			# cr = Category(name = "Math")
+			# cr.put()
+			# error on take category
+			return category_entity
+		else :
+			category_entity  = Category(name = new_category, parent = ancestor_key)
+			category_entity.put()
+			return category_entity
