@@ -23,3 +23,7 @@ libraries:
 # importing jinja
 - name: jinja2
   version: latest
+
+# importing jinja
+- name: httplib2
+  version: latest

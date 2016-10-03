@@ -10,6 +10,10 @@ from google.appengine.ext import db
 from models.user_model import *
 from models.category_model import *
 from models.blog_model import *
+from general import *
+from google.appengine.api import mail
+from urllib import urlencode
+from libs import httplib2
 
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
@@ -151,3 +155,44 @@ def get_permalink(post_id, update = False) :
 def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
 
+
+# mail stuffs
+def send_complex_message(recipient, text, html):
+    MAILGUN_API_KEY = "key-083013c6e0b9c868f9b1f188fd54fb9a"
+    MAILGUN_DOMAIN_NAME = "sandboxc5be1aa9c7be4b0b8683d2078bbd1bfa.mailgun.org"
+    http = httplib2.Http()
+    http.add_credentials('api', MAILGUN_API_KEY)
+
+    url = 'https://api.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN_NAME)
+    data = {
+        'from': 'Example Sender <mailgun@{}>'.format(MAILGUN_DOMAIN_NAME),
+        'to': recipient,
+        'subject': 'This is an example email from Mailgun',
+        'text': text,
+        'html': html
+    }
+    resp, content = http.request(url, 'POST', urlencode(data))
+    if resp.status != 200:
+        raise RuntimeError(
+            'Mailgun API error: {} {}'.format(resp.status, content))
+    return {"resp" : resp, "content" : content}
+
+# mail stuffs
+def send_simple_message(recipient, text):
+    MAILGUN_API_KEY = "key-083013c6e0b9c868f9b1f188fd54fb9a"
+    MAILGUN_DOMAIN_NAME = "sandboxc5be1aa9c7be4b0b8683d2078bbd1bfa.mailgun.org"
+    http = httplib2.Http()
+    http.add_credentials('api', MAILGUN_API_KEY)
+
+    url = 'https://api.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN_NAME)
+    data = {
+        'from': 'Example Sender <mailgun@{}>'.format(MAILGUN_DOMAIN_NAME),
+        'to': recipient,
+        'subject': 'This is an example email from Mailgun',
+        'html': html
+    }
+    resp, content = http.request(url, 'POST', urlencode(data))
+    if resp.status != 200:
+        raise RuntimeError(
+            'Mailgun API error: {} {}'.format(resp.status, content))
+    return {"resp" : resp, "content" : content}

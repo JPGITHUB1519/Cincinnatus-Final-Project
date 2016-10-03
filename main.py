@@ -28,6 +28,7 @@ from handlers.flushcache_handler import *
 from handlers.imgserve_handler import *
 from handlers.admin_handler import *
 from handlers.enable_disable_handler import *
+from handlers.test_handler import *
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -42,5 +43,6 @@ app = webapp2.WSGIApplication([
     ('/flush/?', FlushcacheHandler),
     ('/admin/?', AdminHandler),
     ('/img_serve/([0-9]+/?)', ImgServe),
-    ('/change_status', EnableDisableHandler)
+    ('/change_status', EnableDisableHandler),
+    ('/test', TestHandler)
 ], debug=True)
