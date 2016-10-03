@@ -8,6 +8,8 @@ class User(db.Model) :
 	group = db.IntegerProperty(required = True)
 	avatar = db.BlobProperty()
 	avatar_filename = db.StringProperty()
+	status = db.BooleanProperty(default=False)
+	verify_hash = db.StringProperty()
 	# group 
 	# 0 -> reading
 	# 1 -> writing

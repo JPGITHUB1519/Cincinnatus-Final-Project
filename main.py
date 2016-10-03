@@ -29,6 +29,8 @@ from handlers.imgserve_handler import *
 from handlers.admin_handler import *
 from handlers.enable_disable_handler import *
 from handlers.test_handler import *
+from handlers.email_signup_handler import *
+from handlers.verify_handler import *
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -44,5 +46,7 @@ app = webapp2.WSGIApplication([
     ('/admin/?', AdminHandler),
     ('/img_serve/([0-9]+/?)', ImgServe),
     ('/change_status', EnableDisableHandler),
-    ('/test', TestHandler)
+    ('/test', TestHandler),
+    ('/email_signup', EmailSignupHandler),
+    ('/verify', VerifyHandler),
 ], debug=True)

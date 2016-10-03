@@ -55,6 +55,11 @@ def check_secure_val(h):
     	return lista[0]
     return None
 
+# return a random hah
+def random_hash():
+   random_word = make_salt()
+   return hashlib.sha256(random_word + SECRET).hexdigest()
+
 # database stuffs
 def get_posts(update = False) :
     """ 
@@ -151,6 +156,10 @@ def get_permalink(post_id, update = False) :
         post = memcache.get(cache_key)[0]
     return post
 
+# get all emails
+def get_users_by_emails(email):
+    data = User.all().filter('email =', email).ancestor(ancestor_key)
+    return data
 # date to string
 def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
