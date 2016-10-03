@@ -4,7 +4,7 @@ class LoginHandler(Handler):
 	def get(self):
 		# if the user not logged
 		if not self.user :
-			self.render("login.html")
+			self.render("login.html", user = self.user)
 		else :
 			self.redirect("/")
 	def post(self):

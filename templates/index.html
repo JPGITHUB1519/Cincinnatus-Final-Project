@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% block title %} Main {% endblock %}
 {% block content %}
-
+	<div class="row">
+		<div class="col-xs-12">
+			<h4 class="text-center">Buscar Por : </h4>
+			<select class="center-block">
+				{% for category in list_categories %}
+					<option value="{{ category.key().id() }}">{{ category.nombre }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
 	{% for p in lista_post %}
 		<div class="row">
 			<div class="col-md-1 date text-center visible-only-large">

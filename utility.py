@@ -113,10 +113,16 @@ def numpost_by_categories(user):
     else :
         return None
 #category actions
-def get_category():
+def get_category(update = False):
     """
         return all categories
     """
+    key = "post"
+    categories_list = memcache.get(key)
+    if categories_list is None or update :
+        logging.info("DBQUERY")
+        categories_list = list(Category.all())
+        memcache.set(key, categories_list)
     return list(Category.all())
 
 def category_by_id(category_id):
