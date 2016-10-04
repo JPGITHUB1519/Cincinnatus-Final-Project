@@ -166,7 +166,7 @@ def date_to_string(date):
 
 
 # mail stuffs
-def send_complex_message(recipient, text, html):
+def send_complex_message(recipient, subject, text, html):
     MAILGUN_API_KEY = "key-083013c6e0b9c868f9b1f188fd54fb9a"
     MAILGUN_DOMAIN_NAME = "sandboxc5be1aa9c7be4b0b8683d2078bbd1bfa.mailgun.org"
     http = httplib2.Http()
@@ -176,7 +176,7 @@ def send_complex_message(recipient, text, html):
     data = {
         'from': 'Example Sender <mailgun@{}>'.format(MAILGUN_DOMAIN_NAME),
         'to': recipient,
-        'subject': 'This is an example email from Mailgun',
+        'subject': subject,
         'text': text,
         'html': html
     }
@@ -195,7 +195,7 @@ def send_simple_message(recipient, text):
 
     url = 'https://api.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN_NAME)
     data = {
-        'from': 'Example Sender <mailgun@{}>'.format(MAILGUN_DOMAIN_NAME),
+        'from': 'Ninja Blog <mailgun@{}>'.format(MAILGUN_DOMAIN_NAME),
         'to': recipient,
         'subject': 'This is an example email from Mailgun',
         'html': html

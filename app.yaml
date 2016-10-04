@@ -24,6 +24,6 @@ libraries:
 - name: jinja2
   version: latest
 
-# importing jinja
-- name: httplib2
-  version: latest
+# # importing jinja
+# - name: httplib2
+#   version : "2.0.8"

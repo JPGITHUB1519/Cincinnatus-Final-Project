@@ -76,6 +76,7 @@ class EmailSignupHandler(Handler):
 			user.put()
 			verify_link = "http://localhost:10080/verify?email=%s&verify_hash=%s" %(user.email, user.verify_hash)
 			email_text = "Verification Email"
+			email_subject = "Welcome to Ninja Blog"
 			email_html = """
 			<!DOCTYPE html>
 			<html>
@@ -102,17 +103,15 @@ class EmailSignupHandler(Handler):
 					border: 1px solid;
 				}
 				.btn-custom {
-					background-color: hsl(195, 60%, 35%) !important;
+					
 					background-repeat: repeat-x;
 					filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#2d95b7", endColorstr="#23748e");
 					background-image: -khtml-gradient(linear, left top, left bottom, from(#2d95b7), to(#23748e));
 					background-image: -moz-linear-gradient(top, #2d95b7, #23748e);
 					background-image: -ms-linear-gradient(top, #2d95b7, #23748e);
-					background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2d95b7), color-stop(100%, #23748e));
 					background-image: -webkit-linear-gradient(top, #2d95b7, #23748e);
 					background-image: -o-linear-gradient(top, #2d95b7, #23748e);
-					background-image: linear-gradient(#2d95b7, #23748e);
-					border-color: #23748e #23748e hsl(195, 60%, 32.5%);
+					background-image: linear-gradient(#2d95b7, #23748e);	
 					color: #fff !important;
 					text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.16);
 					-webkit-font-smoothing: antialiased;
@@ -126,17 +125,15 @@ class EmailSignupHandler(Handler):
 				}
 				.btn-custom:hover
 				{
-					background-color: hsl(0, 69%, 22%) !important;
+					
 					background-repeat: repeat-x;
 					filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#b42121", endColorstr="#5e1111");
 					background-image: -khtml-gradient(linear, left top, left bottom, from(#b42121), to(#5e1111));
 					background-image: -moz-linear-gradient(top, #b42121, #5e1111);
 					background-image: -ms-linear-gradient(top, #b42121, #5e1111);
-					background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #b42121), color-stop(100%, #5e1111));
 					background-image: -webkit-linear-gradient(top, #b42121, #5e1111);
 					background-image: -o-linear-gradient(top, #b42121, #5e1111);
 					background-image: linear-gradient(#b42121, #5e1111);
-					border-color: #5e1111 #5e1111 hsl(0, 69%, 17%);
 					color: #fff !important;
 					text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.33);
 					-webkit-font-smoothing: antialiased;
@@ -146,15 +143,16 @@ class EmailSignupHandler(Handler):
 			</head>
 			<body>
 			<div class="container">
-				<h2 class="text-center">%(username)s</h2>
+				<p class="text-center">%(username)s</p>
 				<p class="text-center">Thanks For SignUp to NINJAS BLOG!. Please active your accouunt by clicking the button below : </p>
 				<a href="%(link)s" class="btn-custom text-center">Activate Your Account</a>
 				<p class="text-center">Thanks and Happy Blogging</p>
 				<p class="text-center">The Ninjas Team</p>
 			</div>
 			</body>
-			</html>""" % {"name" : user.username, "link" : verify_link}
-			send_complex_message(user.email, email_text, email_html)
+			</html>"""
+			email_html = email_html % {"username" : user.username , "link" : verify_link} 
+			send_complex_message(email_subject, user.email, email_text, email_html)
 			self.login(user)
 			self.redirect('/verify')
 		else :

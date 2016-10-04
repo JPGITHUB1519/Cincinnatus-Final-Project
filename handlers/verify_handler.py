@@ -15,5 +15,8 @@ class VerifyHandler(Handler):
 					user.status = True
 					user.put()
 					self.redirect('/')
+				else :
+					self.write("Error Verificando")
+
 
 
