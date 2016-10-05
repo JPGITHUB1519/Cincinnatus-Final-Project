@@ -18,6 +18,5 @@ class MainHandler(Handler):
 							QUERIED = QUERIED, 
 							username = self.user.username,
 							list_categories = list_categories)
-			
 			else :
 				self.write("You have not Permission to access this page because you are a only Writer User")
