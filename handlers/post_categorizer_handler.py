@@ -2,6 +2,9 @@ from basic_handler import *
 import json
 
 class PostCategorizerHandler(Handler):
+	""" Post Categorize Service
+		This Handler returns a json with the post clasified by category
+	"""
 	def get(self):
 		self.write("hello")
 

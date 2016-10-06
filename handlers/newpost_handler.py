@@ -8,29 +8,36 @@ import logging
 
 class NewpostHandler(Handler) :
 	def get(self) :
-		if self.user.group > 0 : 
-			# a = Category(name = "Tec", description = "Tecnology")
-			# a.put()
-			category_list = get_category()
-			edit_post_id = self.request.get("p") 
-			# if send id in the url, edit it!
-			if edit_post_id :
-				post = post_by_id(edit_post_id)
-				self.render("newpost.html",
-							category_list = category_list, 
-							subject = post.subject, 
-							content = post.content,
-							category = post.category,
-							username = self.user.username)
-			else :
-				self.render("newpost.html", 
-							category_list = category_list,
-							subject = "",
-							content = "",
-							category = "", 
-							username = self.user.username)
+		if not self.user :
+			self.redirect('/login')
 		else :
-			self.write("You have not Permission to access this page because you are a only reader User")
+			# if the user has not active his account
+			if self.user.status == False :
+				self.redirect("/verify")
+			else :
+				if self.user.group > 0 : 
+					# a = Category(name = "Tec", description = "Tecnology")
+					# a.put()
+					category_list = get_category()
+					edit_post_id = self.request.get("p") 
+					# if send id in the url, edit it!
+					if edit_post_id :
+						post = post_by_id(edit_post_id)
+						self.render("newpost.html",
+									category_list = category_list, 
+									subject = post.subject, 
+									content = post.content,
+									category = post.category,
+									username = self.user.username)
+					else :
+						self.render("newpost.html", 
+									category_list = category_list,
+									subject = "",
+									content = "",
+									category = "", 
+									username = self.user.username)
+				else :
+					self.write("You have not Permission to access this page because you are a only reader User")
 
 	def post(self) :
 		subject = self.request.get("subject")

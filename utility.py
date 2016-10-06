@@ -6,6 +6,11 @@ import general
 import hashlib
 import logging
 import time
+import os
+# Import the email modules
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from google.appengine.ext import db
 from models.user_model import *
 from models.category_model import *
@@ -14,11 +19,12 @@ from general import *
 from google.appengine.api import mail
 from urllib import urlencode
 from libs import httplib2
-
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
 from google.appengine.api import memcache
 SECRET = "PYTHON"
+email_sender = 'juanpedro1519@gmail.com'
+email_password = 'jp23051519'
 # User System function
 def make_salt():
     return ''.join(random.choice(string.letters) for x in xrange(5))
@@ -165,8 +171,8 @@ def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
 
 
-# mail stuffs
-def send_complex_message(recipient, subject, text, html):
+# mailgun
+def send_mailgun_complex_message(recipient, subject, html):
     MAILGUN_API_KEY = "key-083013c6e0b9c868f9b1f188fd54fb9a"
     MAILGUN_DOMAIN_NAME = "sandboxc5be1aa9c7be4b0b8683d2078bbd1bfa.mailgun.org"
     http = httplib2.Http()
@@ -177,7 +183,6 @@ def send_complex_message(recipient, subject, text, html):
         'from': 'Example Sender <mailgun@{}>'.format(MAILGUN_DOMAIN_NAME),
         'to': recipient,
         'subject': subject,
-        'text': text,
         'html': html
     }
     resp, content = http.request(url, 'POST', urlencode(data))
@@ -186,8 +191,7 @@ def send_complex_message(recipient, subject, text, html):
             'Mailgun API error: {} {}'.format(resp.status, content))
     return {"resp" : resp, "content" : content}
 
-# mail stuffs
-def send_simple_message(recipient, text):
+def send_mailgun_simple_message(recipient, text):
     MAILGUN_API_KEY = "key-083013c6e0b9c868f9b1f188fd54fb9a"
     MAILGUN_DOMAIN_NAME = "sandboxc5be1aa9c7be4b0b8683d2078bbd1bfa.mailgun.org"
     http = httplib2.Http()
@@ -205,3 +209,31 @@ def send_simple_message(recipient, text):
         raise RuntimeError(
             'Mailgun API error: {} {}'.format(resp.status, content))
     return {"resp" : resp, "content" : content}
+
+def send_simple_email(recipient, subject, text):
+    msg = MIMEText(text)
+    msg['To'] = recipient
+    msg['From'] = email_sender
+    msg['Subject'] = subject
+
+    username = email_sender
+    password = email_password
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.starttls()
+    server.login(email_sender, email_password)
+    server.sendmail(email_password, recipient, msg.as_string())
+    server.quit
+
+def send_html_email(recipient, subject, html):
+    msg = MIMEMultipart('alternative')
+    msg['To'] = recipient
+    msg['From'] = email_sender
+    msg['Subject'] = subject
+    message_content = MIMEText(html, 'html')
+    msg.attach(message_content)
+    username = email_sender
+    password = email_password
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.starttls()
+    server.login(email_sender, email_password)
+    server.sendmail(email_password, recipient, msg.as_string())
