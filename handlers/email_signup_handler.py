@@ -74,7 +74,7 @@ class EmailSignupHandler(Handler):
 			user = User(username=username, password = password, email = email, group = group, avatar = avatar.file.read(), avatar_filename = avatar_filename, verify_hash = verify_hash)
 			# saving data in the database
 			user.put()
-			verify_link = "http://localhost:10080/verify?email=%s&verify_hash=%s" %(user.email, user.verify_hash)
+			verify_link = "http://localhost:8080/verify?email=%s&verify_hash=%s" %(user.email, user.verify_hash)
 			email_text = "Verification Email"
 			email_subject = "Welcome to Ninja Blog"
 			email_html = """

@@ -12,5 +12,8 @@ class Blog(db.Model) :
 	# auto now is for overwriting a existed date if it exits
 	last_modified = db.DateProperty(auto_now = True)
 	status = db.BooleanProperty()
-
+	likes = db.IntegerProperty(default = 0)
+	users_liked = db.ListProperty(db.Key, default = [])
+	dislikes = db.IntegerProperty(default = 0)
+	users_disliked = db.ListProperty(db.Key, default = [])
 

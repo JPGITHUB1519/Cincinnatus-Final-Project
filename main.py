@@ -32,6 +32,7 @@ from handlers.test_handler import *
 from handlers.email_signup_handler import *
 from handlers.verify_handler import *
 from handlers.post_categorizer_handler import *
+from handlers.post_sensation_handler import *
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -50,5 +51,6 @@ app = webapp2.WSGIApplication([
     ('/test', TestHandler),
     ('/email_signup', EmailSignupHandler),
     ('/verify', VerifyHandler),
-    ("/post_categorizer", PostCategorizerHandler)
+    ("/post_categorizer", PostCategorizerHandler),
+    ("/post_sensation/?", PostSensationHandler)
 ], debug=True)
