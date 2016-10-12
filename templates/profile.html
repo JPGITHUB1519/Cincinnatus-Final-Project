@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %} SignUp {% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-md-12">
+			<h2 class="text-center little-padding">Profile</h2>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9 center-block">
+			<form class="form-horizontal" method="post" enctype="multipart/form-data" id="form">
+			
+			    <div class="form-group">
+					<label class="control-label col-sm-2">Imagen</label>
+					<div class="col-md-10">
+						<img id="image" src="http://placehold.it/250x250" />
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-8">
+						<input type="file" name="pic" accept="image/*" id="files" class="little-padding" value='{{ avatar_route }}'>
+					</div>
+				</div>
+				<div class="form-group"> 
+					<div class="col-sm-offset-2 col-sm-10">
+					  <button type="submit" class="btn btn-default center-block">Submit</button>
+					</div>
+				</div>
+			
+				<div class="form-group">
+					<label class="control-label col-sm-2">Name:</label>
+					<div class="col-sm-10">
+					  <input type="text" class="form-control" placeholder="Enter your name" name="name" value = "{{name}}">
+					  <p class="error-text">{{ error_name }}</p>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="control-label col-sm-2">Telephone:</label>
+					<div class="col-sm-10">
+					  <input type="tel" class="form-control" placeholder="" name="telephone" value = "{{telephone}}">
+					  <p class="error-text">{{ error_phone }}</p>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="control-label col-sm-2">Date of Birth:</label>
+					<div class="col-sm-10">
+					  <input type="date" class="form-control" placeholder="" name="date" value = "{{date}}">
+					  <p class="error-text">{{ error_date }}</p>
+					</div>
+				</div>
+				
+				<div class="form-group">
+					<label class="control-label col-sm-2">Tell us about yourself:</label>
+					<div class="col-sm-10">
+					  <textarea class="form-control" name = "description">{{ description }}</textarea>
+					</div>
+				</div>
+				
+				
+				
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		/* code snippet for show image before upload */
+		document.getElementById("files").onchange = function () {
+		var reader = new FileReader();
+
+		reader.onload = function (e) {
+		    // get loaded data and render thumbnail.
+		    document.getElementById("image").src = e.target.result;
+		};
+
+		// read the image file as a data URL.
+		reader.readAsDataURL(this.files[0]);
+		};
+	</script>
+{% endblock %}
+
+
+
