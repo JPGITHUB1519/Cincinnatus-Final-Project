@@ -1,78 +1,57 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>{% block title %}{% endblock %}</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" type="text/css" href="/static/css/vendor/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
-	<script type="text/javascript" src="/static/js/vendor/jquery-3.1.0.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
-</head>
-<body>
-	<div class="full-container">
-		<div class="bg-blue-beatiful full-width little-padding">
-			<h2 class="text-white">Administration</h2>
-		</div>
-		<a class="mobile-menu">&#9776;&nbsp;Menu</a>
+{% extends "administration_base.html" %}
+{% block title %} Administration {% endblock %}
+
+{% block content %}
+	<div class="content box">
 		<div class="group">
-			<div class="sidebar bg-black">
-				<ul id="nav">
-					<li><a href="">Dashboard</a></li>
-					<li><a href="">Booter Hub</a></li>
-					<li><a href="">Friends</a></li>
-					<li><a href="">Static</a></li>
-					<li><a href="">Stuffs</a></li>
-				</ul>
+			<div class="box">
+				<h2 class="text-center">DashBoard</h2>
 			</div>
-			<div class="content box">
-				<div class="group">
-					<div class="box">
-						<h2 class="text-center">DashBoard</h2>
-					</div>
-					<div class="box">
-						<canvas id="myChart" style="width: 50%;"></canvas>
-					</div>
-				</div>
-				<div class="group">
-					<div class="box">
-						<h2 class="text-center">PostList</h2>
-					</div>
-				</div>
-				<div class="table-responsive">
-					<table class="table">
-						<thead>
-							<thead>
-								<tr>
-									<td>Subject</td>
-									<td>Content</td>
-									<td>Date</td>
-									<td>Category</td>
-									<td>Update</td>
-									<td>Disable</td>
-								</tr>
-							</thead>
-							<tbody>
-								{% for data in list_posts %}
-									<tr>
-										<td>{{ data.subject }}</td>
-										<td>{{ data.content }}</td>
-										<td>{{ data.date }}</td>
-										<td>{{ data.category.name }}</td>
-										<td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
-										{% if data.status == True %}
-											<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text">Disable</a></td>
-										{% else %}
-											<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
-										{% endif %}
-									</tr>
-								{% endfor %}
-							</tbody>
-						</thead>
-					</table>
-				</div>
+			<div class="box">
+				<canvas id="myChart" style="width: 50%;"></canvas>
 			</div>
+		</div>
+		<div class="group">
+			<div class="box">
+				<h2 class="text-center">PostList</h2>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<thead>
+						<tr>
+							<td>Subject</td>
+							<td>Content</td>
+							<td>User</td>
+							<td>Date</td>
+							<td>Category</td>
+							<td>Update</td>
+							<td>Disable</td>
+						</tr>
+					</thead>
+					<tbody>
+						{% for data in list_posts %}
+							<tr>
+								<td>{{ data.subject }}</td>
+								<td>{{ data.content }}</td>
+								<td>{{ data.user.username }}</td>
+								<td>{{ data.date }}</td>
+								<td>{{ data.category.name }}</td>
+								<td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
+								{% if data.status == True %}
+									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text">Disable</a></td>
+								{% else %}
+									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+					</tbody>
+				</thead>
+			</table>
 		</div>
 	</div>
+
 	<script type="text/javascript">
 		/* function to get keys and values from a json sended by the server */
 		function get_keys(json_data)
@@ -177,7 +156,5 @@
 			return;
 		}
 	</script>
-</body>
-</html>
 
-	
+{% endblock %}

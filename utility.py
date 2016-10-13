@@ -173,6 +173,24 @@ def numpost_by_categories(user):
     else :
         return None
 #category actions
+def check_exits_category(category_name):
+    """"
+        Check if exits a category
+    """
+    category_entity = get_category_by_name(category_name)
+    logging.error(category_entity)
+    if category_entity :
+        return True
+    return False
+
+def insert_category(category_name) :
+    if not check_exits_category(category_name) :
+        category_entity = Category(name = category_name, parent = ancestor_key)
+        category_entity.put()
+        return True
+    else :
+        return False
+        
 def get_category(update = False):
     """
         return all categories
@@ -184,6 +202,10 @@ def get_category(update = False):
         categories_list = list(Category.all())
         memcache.set(key, categories_list)
     return list(Category.all())
+
+def get_category_by_name(category_name):
+    category_entity = Category.all().filter("name =", category_name).ancestor(ancestor_key)
+    return list(category_entity)
 
 def category_by_id(category_id):
     category_entity = Category.get_by_id(int(category_id), parent = ancestor_key)

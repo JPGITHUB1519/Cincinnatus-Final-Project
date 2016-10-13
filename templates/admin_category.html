@@ -1,0 +1,21 @@
+{% extends "administration_base.html" %}
+{% block title %}Nombre {% endblock %}
+
+{% block content %} 
+	<div class="content box">
+		<h2 class="text-center little-padding">Category Management</h2>
+		<div class="group">
+			<div class="box">
+				<form method="post">
+					<div class="centered-form">
+						<label class="control-label">Category Name</label>
+						<input class="form-control" type="text" name="category_name">
+						<input class="btn btn-default center-block-only-small center-block little-margin-top" type="submit" value="Submit">
+					</div>
+					<h3 class="error-text text-center">{{error}}</h3>
+					<h3 class="error-text text-center">{{error_exits}}</h3>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
