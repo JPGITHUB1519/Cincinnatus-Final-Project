@@ -272,7 +272,8 @@ tbody tr:nth-child(even)
         width: 25%;
         height : 100vh;
         float : left;
-        display: block;
+        /* this for keep when desktop when do not push the button */
+        display: block !important; 
     }
     .content
     {
@@ -296,6 +297,7 @@ tbody tr:nth-child(even)
 }
 @media only screen and (min-width: 992px) 
 {
+
     /* For desktop: */
     .visible-only-large
     {
