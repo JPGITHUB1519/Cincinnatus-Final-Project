@@ -88,12 +88,34 @@ def get_posts(update = False) :
         memcache.set(key, posts)
     return posts
 
+def get_posts_whithout_status(update = False) :
+    """ 
+        The same that the before but without status filter
+        This obtain the post from the Cache. The Cache is always update
+        and it get update when a user make a new Post. We only read in the
+        Database when we write on it
+    """
+    # using the global variable query time
+    key = "post_nostatus"
+    posts = memcache.get(key)
+    if posts is None or update :
+        logging.error("DBQUERY")
+        # getting post from the database
+        # posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10")
+        posts = Blog.all().order("-date").ancestor(ancestor_key)
+        posts = list(posts)
+        # saving the last time query to the database
+        memcache.set("time_last_query", time.time()) 
+        # updating cache
+        memcache.set(key, posts)
+    return posts
+
 # post actions
 def post_by_category(category):
     """
         returns posts filter by one categorie
     """
-    post = Blog.all().filter('category =', category.key())
+    post = Blog.all().filter('category =', category.key()).ancestor(ancestor_key)
     return list(post)
 
 def post_by_user(user):
@@ -106,14 +128,37 @@ def post_by_id(id):
     return post
 
 # filter by user and category
+def post_by_category(category):
+    """
+        returns posts filter by one categorie
+    """
+    post = Blog.all().filter('category =', category.key()).ancestor(ancestor_key)
+    return list(post)
+
+# filter by user and category
 def post_by_category_and_user(category, user):
     """
         returns posts filter by one categorie
     """
-    post = Blog.all().filter('category =', category.key()).filter('user = ', user.key())
+    post = Blog.all().filter('category =', category.key()).filter('user = ', user.key()).ancestor(ancestor_key)
     return list(post)
 
-# number of post by topic
+# number of post by topic of all users
+def numpost_all():
+    """
+        it returns a dictionary with the topics and its numbers of pos
+    t"""
+    topics = get_category()
+    data = {}
+    if topics :
+        for topic in topics :
+            post = post_by_category(topic)
+            data[topic.name] = len(post)
+        return data
+    else :
+        return None
+
+# number of post by topic and user
 def numpost_by_categories(user):
     """
         it returns a dictionary with the topics and its numbers of pos
@@ -166,6 +211,7 @@ def get_permalink(post_id, update = False) :
 def get_users_by_emails(email):
     data = User.all().filter('email =', email).ancestor(ancestor_key)
     return data
+
 # date to string
 def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
