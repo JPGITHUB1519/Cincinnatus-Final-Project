@@ -8,7 +8,7 @@
 			<div class="box">
 				<form>
 					<div class="centered-form">
-						<label class="control-label">Category Name</label>
+						<label class="control-label">New Category</label>
 						<input class="form-control" type="text" id="category_name" name = "category_name">
 						<input class="btn btn-default center-block-only-small center-block little-margin-top" type="submit" value="Submit" id="save">
 					</div>
@@ -30,16 +30,44 @@
 					</thead>
 					<tbody id="table_data">
 						{% for data in category_list %}
-							<tr id="data_{{ data.key() }}">
-								<td>{{ data.name }}</td>
+							<tr id="data_{{ data.key() }}" value="{{ data.key() }}">
+								<td id="data_name_{{data.key()}}">{{ data.name }}</td>
 								<td>{{ data.date }}</td>
-								<td><a href="" value="{{ data.key() }}">Update</a></td>
+								<!-- Trigger Model With A Button -->
+								<td><a href="" id="updater_{{ data.key()}}" class="updater" data-toggle="modal" data-target="#update_category_modal" value="{{ data.key() }}">Update</a></td>
 								<td><a id="deleter_{{ data.key() }}" href="javascript:delete_category('{{data.key()}}');" value = "{{ data.key()}}"">Delete</a></td>
 							</tr>
 						{% endfor %}
 					</tbody>
 				</thead>
 			</table>
+			
+			<!-- Modal -->
+			<div id="update_category_modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal Content -->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Edit Category</h4>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="centered-form">
+									<label class="control-label">Update Category</label>
+									<input class="form-control" type="text" id="new_category_name" name = "new_category_name">
+									<input class="btn btn-default center-block-only-small center-block little-margin-top" type="submit" value="Submit" id="save">
+								</div>
+								<h3 id="error_empty" class="error-text text-center">{{error}}</h3>
+								<h3 id="error_exits" class="error-text text-center">{{error_exits}}</h3>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 
@@ -132,6 +160,14 @@
 				e.preventDefault();
 				category_name = $("#category_name").val();
 				insert_category(category_name);
+			});
+
+			$("a[data-toggle=modal]").click(function(e)
+			{
+				var data_name_name = "data_name_" + $(this).val();
+				console.log(data_name_name);
+				var row_val = $(data_name_name).val();
+				$("#new_category_name").val(row_val);
 			});
 		});
 
