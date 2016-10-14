@@ -187,9 +187,9 @@ def insert_category(category_name) :
     if not check_exits_category(category_name) :
         category_entity = Category(name = category_name, parent = ancestor_key)
         category_entity.put()
-        return True
+        return category_entity
     else :
-        return False
+        return None
         
 def get_category(update = False):
     """
