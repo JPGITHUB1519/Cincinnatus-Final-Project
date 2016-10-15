@@ -9,6 +9,11 @@ html, body{
     position:relative !important;
 }
 
+a
+{
+  cursor: pointer;
+}
+
 /* ==========================================================================
    Text-clases
    ========================================================================== 
@@ -30,6 +35,10 @@ html, body{
 .text-white
 {
     color : #FFFFFF;
+}
+.text-info
+{
+  color : 01415A;
 }
 .bg-black
 {

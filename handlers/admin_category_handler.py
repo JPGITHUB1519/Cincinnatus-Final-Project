@@ -51,4 +51,28 @@ class AdminCategoryHandler(Handler):
 				response["category_key"] = category_key
 			else :
 				response["error"] = "Empty Category Key"
+
+		if action == "update" :
+			category_key = data["category_key"]
+			new_value = data["category_new_value"]
+			if new_value :
+				# if not exits a category with that name
+				if not get_category_by_name(new_value) :
+					entity = get_category_by_key(category_key)
+					entity.name  = new_value
+					entity.put()
+					response["status"] = "ok"
+					response["category_entity"] = {
+								"category_id" : int(entity.key().id()),
+								"category_name" : entity.name,
+								"category_key" : str(entity.key()),
+								"category_date" : str(entity.date)
+								}
+				else :
+					response["estatus"] =  "error"
+					response["error"] = "This category already exits"
+			else :
+				response["estatus"] =  "error"
+				response["error"] = "You must the new category name field"
+
 		self.write(json.dumps(response))

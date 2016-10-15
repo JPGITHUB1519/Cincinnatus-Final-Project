@@ -34,8 +34,8 @@
 								<td id="data_name_{{data.key()}}">{{ data.name }}</td>
 								<td>{{ data.date }}</td>
 								<!-- Trigger Model With A Button -->
-								<td><a href="" id="updater_{{ data.key()}}" class="updater" data-toggle="modal" data-target="#update_category_modal" value="{{ data.key() }}">Update</a></td>
-								<td><a id="deleter_{{ data.key() }}" href="javascript:delete_category('{{data.key()}}');" value = "{{ data.key()}}"">Delete</a></td>
+								<td><a id="updater_{{ data.key()}}" class="updater" data-target="#update_category_modal" data-key-value="{{ data.key() }}">Update</a></td>
+								<td><a id="deleter_{{ data.key() }}" href="javascript:delete_category('{{data.key()}}');" value = "{{ data.key()}}">Delete</a></td>
 							</tr>
 						{% endfor %}
 					</tbody>
@@ -49,21 +49,20 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title">Edit Category</h4>
+							<h4 class="modal-title">Edit Category<span id="old_category_name" class="text-info">Category Name</span></h4>
 						</div>
 						<div class="modal-body">
 							<form>
 								<div class="centered-form">
 									<label class="control-label">Update Category</label>
-									<input class="form-control" type="text" id="new_category_name" name = "new_category_name">
-									<input class="btn btn-default center-block-only-small center-block little-margin-top" type="submit" value="Submit" id="save">
+									<input class="form-control" type="text" id="new_category_name" name = "new_category_name" data-category-key="">
+									<input class="btn btn-default center-block-only-small center-block little-margin-top" type="submit" value="Submit" id="update_button">
 								</div>
-								<h3 id="error_empty" class="error-text text-center">{{error}}</h3>
-								<h3 id="error_exits" class="error-text text-center">{{error_exits}}</h3>
+								<h3 id="update_error" class="error-text text-center"></h3>
 							</form>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button id="close_updater_modal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 						</div>
 					</div>
 				</div>
@@ -102,7 +101,7 @@
 				else
 				{
 					var category_key = response["category_entity"]["category_key"];
-					var string_html = "<tr id='data_%category_key%'}><td> %category_name% </td><td> %category_date% </td><td><a id='updater_%category_key%'>Update</a></td><td><a id='deleter_%category_key%' href = javascript:delete_category('%category_key%');>Delete</a></td></tr>";
+					var string_html = "<tr id='data_%category_key%' value='%category_key%'><td id='data_name_%category_key%'>%category_name%</td><td>%category_date%</td><td><a id='updater_%category_key%' class='updater' data-target='#update_category_modal' data-key-value='%category_key%'>Update</a></td><td><a id='deleter_%category_key%' href = javascript:delete_category('%category_key%'); value = '%category_key%'>Delete</a></td></tr>";
 					var category_name = response["category_entity"]["category_name"];
 					var category_date = response["category_entity"]["category_date"];
 					string_html = string_html.replace("%category_name%", category_name);
@@ -153,6 +152,42 @@
 			
 		}
 
+		function update_category(category_key, category_new_value)
+		{
+			$.ajax(
+			{
+
+				type : "POST",
+				url : "/admin_category",
+				contentType : "application/json",
+				datatype : "json",
+				data : JSON.stringify({"category_new_value" : category_new_value,
+									   "category_key" : category_key, 
+									   "action" : "update"
+										})
+			})
+			.done(function(response)
+			{
+				console.log(response);
+				if("error" in response)
+				{
+					$("#update_error").text(response["error"]);
+				}
+				else
+				{
+					var row_name_name = "#data_name_" + category_key;
+					$('#update_category_modal').modal('hide');
+					$("#update_error").text("");
+					$(row_name_name).text(response["category_entity"]["category_name"]);
+				}
+			})
+			.fail(function(textStatus)
+			{
+				console.log(textStatus);
+			});
+			
+		}
+
 		$(document).ready(function()
 		{
 			$("#save").click(function(e)
@@ -162,13 +197,59 @@
 				insert_category(category_name);
 			});
 
-			$("a[data-toggle=modal]").click(function(e)
+			// $(".updater").click(function(e)
+			// {
+			// 	// open modal
+			// 	$("#update_category_modal").modal();
+			// 	alert("hey")
+			// 	var category_key = $(this).data("key-value");
+			// 	var data_name_name = "#data_name_" + category_key;
+			// 	console.log(data_name_name);
+			// 	var row_val = $(data_name_name).text();
+			// 	$("#new_category_name").val(row_val);
+			// 	$("#old_category_name").text(" " + row_val);
+			// 	$("#new_category_name").data("category-key", category_key);
+			// 	// clean any error when click
+			// 	$("#update_error").text("");
+
+			// });
+
+			/* When the document is already loaded and we wanna make a event future new objects we have
+				to use a delegate like this */
+
+			// Click for Future Links 
+			$(document).on("click", '.updater', function (e) 
 			{
-				var data_name_name = "data_name_" + $(this).val();
+				// open modal
+				$("#update_category_modal").modal();
+				var category_key = $(this).data("key-value");
+				var data_name_name = "#data_name_" + category_key;
 				console.log(data_name_name);
-				var row_val = $(data_name_name).val();
+				var row_val = $(data_name_name).text();
 				$("#new_category_name").val(row_val);
+				$("#old_category_name").text(" " + row_val);
+				$("#new_category_name").data("category-key", category_key);
+				// clean any error when click
+				$("#update_error").text("");
 			});
+
+
+			$("#update_button").click(function(e)
+			{
+				e.preventDefault();
+				var category_key = $("#new_category_name").data("category-key");
+				var category_new_value = $("#new_category_name").val();
+				update_category(category_key, category_new_value);
+
+			});
+
+			$("#close_updater_modal").click(function(e)
+			{
+				$("#new_category_name").val("");
+				$("#old_category_name").text("");
+
+			});
+			
 		});
 
 		

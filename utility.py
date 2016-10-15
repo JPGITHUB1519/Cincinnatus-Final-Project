@@ -203,6 +203,9 @@ def get_category(update = False):
         memcache.set(key, categories_list)
     return list(Category.all())
 
+def get_category_by_key(category_key):
+    return db.get(category_key)
+
 def get_category_by_name(category_name):
     category_entity = Category.all().filter("name =", category_name).ancestor(ancestor_key)
     return list(category_entity)
