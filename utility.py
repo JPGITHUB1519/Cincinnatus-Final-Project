@@ -19,6 +19,7 @@ from general import *
 from google.appengine.api import mail
 from urllib import urlencode
 from libs import httplib2
+from models.comment_model import *
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
 from google.appengine.api import memcache
@@ -109,6 +110,20 @@ def get_posts_whithout_status(update = False) :
         # updating cache
         memcache.set(key, posts)
     return posts
+
+def get_comments_by_post(post_id, update = False) :
+    """ 
+        Get All Comments of a specified Post
+    """
+    post = post_by_id(post_id)
+    post_key = post.key()
+    key = "comments_by_post"
+    comments = memcache.get(key)
+    if comments is None or update :
+        comments = Comment.all().order("-date").filter("post =", post_key).ancestor(ancestor_key)
+        comments = list(comments)
+        memcache.set(key, comments)
+    return comments
 
 # post actions
 def post_by_category(category):
@@ -236,6 +251,13 @@ def get_permalink(post_id, update = False) :
 def get_users_by_emails(email):
     data = User.all().filter('email =', email).ancestor(ancestor_key)
     return data
+
+# comments stuff
+def insert_comment(subject, content, post, user) :
+    comentario = Comment(user = user, post = post, subject = subject, content = content, parent = ancestor_key )
+    comentario.put()
+    get_comments_by_post(comentario.post.key().id(), True)
+    return comentario
 
 # date to string
 def date_to_string(date):

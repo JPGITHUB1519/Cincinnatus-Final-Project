@@ -1,6 +1,9 @@
 from basic_handler import *
 from main_handler import *
+from models.comment_model import *
+from utility import *
 import time
+import json
 
 class PermalinkHandler(MainHandler):
     def get(self, post_id):
@@ -11,6 +14,7 @@ class PermalinkHandler(MainHandler):
             if self.user.status == False :
                 self.redirect("/verify")
             else :
+                comments = get_comments_by_post(post_id)
             	update = self.request.get("p")
             	# if update is true query the cache and show the new post else load from cache
             	if update == "true" :
@@ -23,4 +27,34 @@ class PermalinkHandler(MainHandler):
                     self.write("ERRROR 404 NOT FOUND THIS PAGE WAS NOT FOUND IN THIS SERVER")
                     return
                 QUERIED =  "queried %s seconds ago" % int(query_time)
-                self.render("permalink.html", p = post, QUERIED = QUERIED)
+                self.render("permalink.html", p = post, QUERIED = QUERIED, comments = comments)
+
+    def post(self, post_id):
+        self.response.headers['Content-Type'] = "application/json"
+        data = json.loads(self.request.body)
+        subject = data["subject"]
+        content = data["content"]
+        action = data["action"]
+        response = {"status" : "ok"}
+        cond_error = False
+        if action == "insert" :
+            if not subject :
+                response["status"] = "error"
+                response["error_subject"] = "You must fill the subject"
+                cond_error = True
+            if not content :
+                response["status"] = "error"
+                response["error_content"] = "You must fill the Content"
+                cond_error = True
+            if not cond_error :
+                post = post_by_id(post_id)
+                comentario = insert_comment(subject, content, post.key(), self.user.key())
+                response["data"] = {"subject" : comentario.subject,
+                                    "content" : comentario.content,
+                                    "date" : str(comentario.date),
+                                    "post_id" : int(post_id),
+                                    "post_key" : str(post.key()),
+                                    "user_key" : str(self.user.key()),
+                                    "username" : comentario.user.username,
+                                    "user_id" : int(self.user.key().id())}
+        self.write(json.dumps(response))
