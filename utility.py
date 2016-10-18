@@ -115,9 +115,10 @@ def get_comments_by_post(post_id, update = False) :
     """ 
         Get All Comments of a specified Post
     """
-    post = post_by_id(post_id)
-    post_key = post.key()
-    key = "comments_by_post"
+    # GETTING KEY BY
+    post_key = key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
+    # each comment has a different space in memcache
+    key = "comments_by_post_" + str(post_key)
     comments = memcache.get(key)
     if comments is None or update :
         comments = Comment.all().order("-date").filter("post =", post_key).ancestor(ancestor_key)
@@ -259,10 +260,13 @@ def insert_comment(subject, content, post, user) :
     get_comments_by_post(comentario.post.key().id(), True)
     return comentario
 
+def count_comments_by_post(post_id) :
+    key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
+    return Comment.all().filter("post =", key).count()
+
 # date to string
 def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
-
 
 # mailgun
 def send_mailgun_complex_message(recipient, subject, html):

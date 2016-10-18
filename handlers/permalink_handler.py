@@ -15,6 +15,8 @@ class PermalinkHandler(MainHandler):
                 self.redirect("/verify")
             else :
                 comments = get_comments_by_post(post_id)
+                total_comments = count_comments_by_post(post_id)
+                logging.error(total_comments)
             	update = self.request.get("p")
             	# if update is true query the cache and show the new post else load from cache
             	if update == "true" :
@@ -27,7 +29,7 @@ class PermalinkHandler(MainHandler):
                     self.write("ERRROR 404 NOT FOUND THIS PAGE WAS NOT FOUND IN THIS SERVER")
                     return
                 QUERIED =  "queried %s seconds ago" % int(query_time)
-                self.render("permalink.html", p = post, QUERIED = QUERIED, comments = comments)
+                self.render("permalink.html", p = post, QUERIED = QUERIED, comments = comments, total_comments = total_comments)
 
     def post(self, post_id):
         self.response.headers['Content-Type'] = "application/json"
@@ -35,6 +37,7 @@ class PermalinkHandler(MainHandler):
         subject = data["subject"]
         content = data["content"]
         action = data["action"]
+        total_comments = count_comments_by_post(post_id)
         response = {"status" : "ok"}
         cond_error = False
         if action == "insert" :
@@ -56,5 +59,7 @@ class PermalinkHandler(MainHandler):
                                     "post_key" : str(post.key()),
                                     "user_key" : str(self.user.key()),
                                     "username" : comentario.user.username,
-                                    "user_id" : int(self.user.key().id())}
+                                    "user_id" : int(self.user.key().id()),
+                                    "total_comments" : total_comments}
+                logging.error(total_comments)
         self.write(json.dumps(response))

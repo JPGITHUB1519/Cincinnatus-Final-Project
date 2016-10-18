@@ -46,7 +46,7 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<h3 class="text-info">Comments</h3>
+			<h3 class="text-info">Comments(<span id="total_comments">{{ total_comments }}</span>)</h3>
 		</div>
 	</div>
 	<div id="comment-container">
@@ -86,8 +86,9 @@
 				string_html = string_html.replace("%date%", response["data"]["date"]);
 				string_html = string_html.replace("%content%", response["data"]["content"]);
 				$("#comment-container").prepend(string_html);
-				$("#subject").val('')
-				$("#content").val('')
+				$("#subject").val('');
+				$("#content").val('');
+				$("#total_comments").text(response["data"]["total_comments"]);
 				console.log(response);
 
 			})
