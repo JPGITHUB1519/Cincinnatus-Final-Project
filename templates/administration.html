@@ -1,50 +1,57 @@
-{% extends "base.html" %}
-{% block title %} Admin Panel {% endblock %}
+{% extends "administration_base.html" %}
+{% block title %} Administration {% endblock %}
 
 {% block content %}
-	<div class="row">
-		<h1 class="text-center">Administration</h1>
-		<div class="col-xs-12">
-			<canvas id="myChart"></canvas>
+	<div class="content box">
+		<div class="group">
+			<div class="box">
+				<h2 class="text-center">DashBoard</h2>
+			</div>
+			<div class="box">
+				<canvas id="myChart" style="width: 50%;"></canvas>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="small-12">
-			<h3 class="text-center">Post Administration</h3>
+		<div class="group">
+			<div class="box">
+				<h2 class="text-center">PostList</h2>
+			</div>
 		</div>
-	</div>
-	<div class="table-responsive">
-		<table class="table">
-			<thead>
+		<div class="table-responsive">
+			<table class="table">
 				<thead>
-					<tr>
-						<td>Subject</td>
-						<td>Content</td>
-						<td>Date</td>
-						<td>Category</td>
-						<td>Update</td>
-						<td>Disable</td>
-					</tr>
-				</thead>
-				<tbody>
-					{% for data in list_posts %}
+					<thead>
 						<tr>
-							<td>{{ data.subject }}</td>
-							<td>{{ data.content }}</td>
-							<td>{{ data.date }}</td>
-							<td>{{ data.category.name }}</td>
-							<td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
-							{% if data.status == True %}
-								<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text">Disable</a></td>
-							{% else %}
-								<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
-							{% endif %}
+							<td>Subject</td>
+							<td>Content</td>
+							<td>User</td>
+							<td>Date</td>
+							<td>Category</td>
+							<td>Update</td>
+							<td>Disable</td>
 						</tr>
-					{% endfor %}
-				</tbody>
-			</thead>
-		</table>
+					</thead>
+					<tbody>
+						{% for data in list_posts %}
+							<tr>
+								<td>{{ data.subject }}</td>
+								<td>{{ data.content }}</td>
+								<td>{{ data.user.username }}</td>
+								<td>{{ data.date }}</td>
+								<td>{{ data.category.name }}</td>
+								<td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
+								{% if data.status == True %}
+									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text">Disable</a></td>
+								{% else %}
+									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
+								{% endif %}
+							</tr>
+						{% endfor %}
+					</tbody>
+				</thead>
+			</table>
+		</div>
 	</div>
+
 	<script type="text/javascript">
 		/* function to get keys and values from a json sended by the server */
 		function get_keys(json_data)
@@ -149,4 +156,5 @@
 			return;
 		}
 	</script>
+
 {% endblock %}
