@@ -7,6 +7,7 @@ import hashlib
 import logging
 import time
 import os
+import operator
 # Import the email modules
 import smtplib
 from email.mime.text import MIMEText
@@ -126,6 +127,49 @@ def get_comments_by_post(post_id, update = False) :
         memcache.set(key, comments)
     return comments
 
+
+def num_comments_by_post(post_id) :
+    post_key = key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
+    num_comments = Comment.all().filter("post =", post_key).ancestor(ancestor_key).count()
+    return num_comments
+
+def num_comments_all_post():
+    """
+        return dic["post_id" : num_comments]
+        Returns the number of Comments  of each Post 
+    """
+    dic = {}
+    posts = get_posts()
+    for post in posts :
+        dic[str(post.key().id())] = num_comments_by_post(post.key().id())
+    return dic
+
+def numdata_comments_all_post():
+    """
+        return dic["post_id" : [num_comments, data]]
+        Returns the number of Comments  of each Post and the data
+    """
+    dic = {}
+    posts = get_posts()
+    for post in posts :
+        dic[str(post.key().id())] = []
+        dic[str(post.key().id())].append(num_comments_by_post(post.key().id()))
+        dic[str(post.key().id())].append(post)
+    return dic
+
+
+def hottest_posts(hootest_dic, num) :
+    """
+        return dic["post_id" : num_comments]
+        Returns the number of Comments  of The Hottets each Post 
+    """
+    return dict(sorted(hootest_dic.iteritems(), key=operator.itemgetter(1), reverse=True)[:num])
+
+def sort_dictionary_desc(dic) :
+    """ 
+        Return a Tuple with the dic Sorted
+    """
+    return sorted(dic.items(), key = operator.itemgetter(1), reverse = True)
 # post actions
 def post_by_category(category):
     """
@@ -263,6 +307,7 @@ def insert_comment(subject, content, post, user) :
 def count_comments_by_post(post_id) :
     key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
     return Comment.all().filter("post =", key).count()
+
 
 # date to string
 def date_to_string(date):

@@ -37,7 +37,6 @@ class PermalinkHandler(MainHandler):
         subject = data["subject"]
         content = data["content"]
         action = data["action"]
-        total_comments = count_comments_by_post(post_id)
         response = {"status" : "ok"}
         cond_error = False
         if action == "insert" :
@@ -52,6 +51,8 @@ class PermalinkHandler(MainHandler):
             if not cond_error :
                 post = post_by_id(post_id)
                 comentario = insert_comment(subject, content, post.key(), self.user.key())
+                # counting after 
+                total_comments = count_comments_by_post(post_id)
                 response["data"] = {"subject" : comentario.subject,
                                     "content" : comentario.content,
                                     "date" : str(comentario.date),
