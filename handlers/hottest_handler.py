@@ -9,5 +9,7 @@ class HottestPost(Handler):
 		#  idpost				number of comments,   postentity
 		# [('5710932114145280', [6, <models.blog_model.Blog object at 0x04428110>])
 		dic_hottest_posts = sort_dictionary_desc(dic_hottest_posts)
-		logging.error(dic_hottest_posts)
+		
+		hottest_category = numcomments_all_category()
+		logging.error(hottest_category)
 		self.render("hottest.html", dic_hottest_posts = dic_hottest_posts)

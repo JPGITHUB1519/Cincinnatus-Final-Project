@@ -157,6 +157,12 @@ def numdata_comments_all_post():
         dic[str(post.key().id())].append(post)
     return dic
 
+def numcomments_all_category() :
+    dic = {}
+    category = get_category()
+    for cat in category :
+        dic[cat.key().id()] = Comment.all().filter("post.category =", cat.key()).ancestor(ancestor_key).count()
+    return dic
 
 def hottest_posts(hootest_dic, num) :
     """
