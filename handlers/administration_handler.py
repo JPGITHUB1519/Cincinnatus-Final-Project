@@ -11,6 +11,6 @@ class AdministrationHandler(Handler):
 				self.redirect("/verify")
 			else :
 				# dictionary getting post data by categories
-				dic_posts = numpost_all()
-				list_posts = get_posts_whithout_status()
+				dic_posts = Blog.numpost_all()
+				list_posts = Blog.get_posts_whithout_status()
 				self.render("administration.html", username = self.user.username, data_json = json.dumps(dic_posts), dic_posts = dic_posts, list_posts = list_posts)

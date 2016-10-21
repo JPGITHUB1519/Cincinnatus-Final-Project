@@ -14,15 +14,15 @@ class PermalinkHandler(MainHandler):
             if self.user.status == False :
                 self.redirect("/verify")
             else :
-                comments = get_comments_by_post(post_id)
-                total_comments = count_comments_by_post(post_id)
+                comments = Comment.get_comments_by_post(post_id)
+                total_comments = Comment.count_comments_by_post(post_id)
                 logging.error(total_comments)
             	update = self.request.get("p")
             	# if update is true query the cache and show the new post else load from cache
             	if update == "true" :
-            		post = get_permalink(post_id, True)
+            		post = Blog.get_permalink(post_id, True)
             	else :
-            		post = get_permalink(post_id)
+            		post = Blog.get_permalink(post_id)
             	key = str(db.Key.from_path('Blog', int(post_id), parent  = ancestor_key))
                 query_time = time.time() - memcache.get(key)[1] 
                 if not post:
@@ -49,10 +49,10 @@ class PermalinkHandler(MainHandler):
                 response["error_content"] = "You must fill the Content"
                 cond_error = True
             if not cond_error :
-                post = post_by_id(post_id)
-                comentario = insert_comment(subject, content, post.key(), self.user.key())
+                post = Blog.post_by_id(post_id)
+                comentario = Comment.insert_comment(subject, content, post.key(), self.user.key())
                 # counting after 
-                total_comments = count_comments_by_post(post_id)
+                total_comments = Comment.count_comments_by_post(post_id)
                 response["data"] = {"subject" : comentario.subject,
                                     "content" : comentario.content,
                                     "date" : str(comentario.date),

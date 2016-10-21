@@ -76,7 +76,7 @@
 			$.ajax(
 			{
 				type : "POST",
-				url : "/admin_category",
+				url : "/administration/category",
 				contentType : "application/json",
 				datatype : "json",
 				data : JSON.stringify({"category_name" : category_name, "action" : "insert"})
@@ -127,7 +127,7 @@
 			$.ajax(
 			{
 				type : "POST",
-				url : "/admin_category",
+				url : "/administration/category",
 				contentType : "application/json",
 				datatype : "json",
 				data : JSON.stringify({"category_key" : category_key, "action" : "delete"})
@@ -157,7 +157,7 @@
 			$.ajax(
 			{
 				type : "POST",
-				url : "/admin_category",
+				url : "/admininistration/category",
 				contentType : "application/json",
 				datatype : "json",
 				data : JSON.stringify({"category_new_value" : category_new_value,

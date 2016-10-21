@@ -1,4 +1,5 @@
 from google.appengine.ext import db
+import utility
 class User(db.Model) :
 	username = db.StringProperty(required=True)
 	password = db.StringProperty(required=True)
@@ -16,4 +17,8 @@ class User(db.Model) :
 	# 2 -> reading / writing
 	# 3 -> Full
 
-
+	@staticmethod
+	# get all emails
+	def get_users_by_emails(email):
+	    data = User.all().filter('email =', email).ancestor(ancestor_key)
+	    return data

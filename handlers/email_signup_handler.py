@@ -36,7 +36,7 @@ class EmailSignupHandler(Handler):
 		error_email = ""
 		error_exits = ""
 		error_group = ""
-		emails = get_users_by_emails(email)
+		emails = User.get_users_by_emails(email)
 		verify_hash = random_hash()
 		# flag for errors
 		cond_error = False

@@ -11,8 +11,8 @@ class PostCategorizerHandler(Handler):
 	def post(self):
 		self.response.headers['Content-Type'] = 'application/json'
 		data = json.loads(self.request.body);
-		category = category_by_id(data["category_id"])
-		post_list = post_by_category(category)
+		category = Category.category_by_id(data["category_id"])
+		post_list = Blog.post_by_category(category)
 		logging.error(post_list)
 		response = {"status" : "error", "data" : []}
 
@@ -23,7 +23,7 @@ class PostCategorizerHandler(Handler):
 				aux_dic["subject"] = post.subject
 				aux_dic["content"] = post.content
 				aux_dic["date"] = str(post.date)
-				aux_dic["category"] = db.to_dict(post.category)   
+				aux_dic["category"] = post.category.name   
 				aux_dic["username"] = post.user.username
 				aux_dic["last_modified"] = str(post.last_modified)
 				aux_dic["status"] = post.status 

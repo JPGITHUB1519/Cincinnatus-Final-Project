@@ -12,6 +12,6 @@ class AdminHandler(Handler):
 				self.redirect("/verify")
 			else :
 				# dictionary getting post data by categories
-				dic_posts = numpost_by_categories(self.user)
-				list_posts = post_by_user(self.user)
+				dic_posts = Category.numpost_by_categories(self.user)
+				list_posts = Blog.post_by_user(self.user)
 				self.render("admin.html", username = self.user.username, data_json = json.dumps(dic_posts), dic_posts = dic_posts, list_posts = list_posts)

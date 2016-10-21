@@ -13,7 +13,7 @@ class PostSensationHandler(Handler):
 		response = {"status" : "error"}
 		post_id = int(data["post_id"])
 		action_type = data["action_type"]
-		post = post_by_id(post_id)
+		post = Blog.post_by_id(post_id)
 		response["post_id"] = post_id
 		if post :
 			# if client call like
@@ -24,7 +24,7 @@ class PostSensationHandler(Handler):
 					post.likes = post.likes + 1
 					response["likes"] = post.likes
 					post.put()
-					get_posts(True)
+					Blog.get_posts(True)
 					response["status"] = "ok"
 
 				else :
@@ -36,7 +36,7 @@ class PostSensationHandler(Handler):
 					post.dislikes = post.dislikes + 1
 					response["dislikes"] = post.dislikes
 					post.put()
-					get_posts(True)
+					Blog.get_posts(True)
 					response["status"] = "ok"
 				else:
 					response["status"] = "already"

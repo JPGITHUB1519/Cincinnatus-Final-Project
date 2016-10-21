@@ -18,11 +18,11 @@ class NewpostHandler(Handler) :
 				if self.user.group > 0 : 
 					# a = Category(name = "Tec", description = "Tecnology")
 					# a.put()
-					category_list = get_category()
+					category_list = Category.get_category()
 					edit_post_id = self.request.get("p") 
 					# if send id in the url, edit it!
 					if edit_post_id :
-						post = post_by_id(edit_post_id)
+						post = Blog.post_by_id(edit_post_id)
 						self.render("newpost.html",
 									category_list = category_list, 
 									subject = post.subject, 
@@ -46,17 +46,17 @@ class NewpostHandler(Handler) :
 		new_category = self.request.get("new_category")
 		error = ""
 		edit_post_id = self.request.get("p") 
-		category_list = get_category()
+		category_list = Category.get_category()
 		if subject and content :
 			# if select a category already made
 			if edit_post_id :
-				post = post_by_id(edit_post_id)
+				post = Blog.post_by_id(edit_post_id)
 				post.subject = subject
 				post.content = content
 				post.category = self.check_get_category(category, new_category)
 				post.put()
 				# Updating the Cache when writing
-				get_posts(True)
+				Blog.get_posts(True)
 				# redirecting with the key of the new post
 				self.redirect('/%s' % str(post.key().id()) + "?p=true")
 			else :
@@ -64,7 +64,8 @@ class NewpostHandler(Handler) :
 				post = Blog(subject = subject, content = content, category = category_entity.key(), user = self.user.key(), status = True, parent = ancestor_key)
 				post.put()
 				# Updating the Cache when writing
-				get_posts(True)
+				Blog.get_posts(True)
+				Blog.get_posts_whithout_status(True)
 				# redirecting with the key of the new post
 				self.redirect('/%s' % str(post.key().id()))
 		else :
@@ -84,7 +85,7 @@ class NewpostHandler(Handler) :
 		"""
 		if category != "other" and not new_category :
 			# category_key = db.Key.from_path("Category", int(category), parent = ancestor_key)
-			category_entity = category_by_id(category)
+			category_entity = Category.category_by_id(category)
 			# cr = Category(name = "Math")
 			# cr.put()
 			# error on take category

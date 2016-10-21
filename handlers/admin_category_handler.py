@@ -1,9 +1,9 @@
 from basic_handler import *
-from models.category_model import *
+
 import json
 class AdminCategoryHandler(Handler):
 	def get(self):
-		category_list = get_category()
+		category_list = Category.get_category()
 		self.render("admin_category.html", category_list = category_list)
 
 	def post(self):
@@ -27,7 +27,7 @@ class AdminCategoryHandler(Handler):
 		if action == "insert" :
 			category_name = data["category_name"]
 			if category_name :
-				category_entity = insert_category(category_name)
+				category_entity = Category.insert_category(category_name)
 				if category_entity :
 					response["status"] = "ok"
 					response["category_entity"] = {
@@ -57,8 +57,8 @@ class AdminCategoryHandler(Handler):
 			new_value = data["category_new_value"]
 			if new_value :
 				# if not exits a category with that name
-				if not get_category_by_name(new_value) :
-					entity = get_category_by_key(category_key)
+				if not Category.get_category_by_name(new_value) :
+					entity = Category.get_category_by_key(category_key)
 					entity.name  = new_value
 					entity.put()
 					response["status"] = "ok"

@@ -4,7 +4,7 @@ import json
 
 class mainJsonHandler(Handler):
 	def get(self):
-		lista_post = get_posts()
+		lista_post = Blog.get_posts()
 		#lista_post = Blog.all.order('-created'.fetch(limit = 10))
 		dicc = []
 		# makin the dictionaries lst

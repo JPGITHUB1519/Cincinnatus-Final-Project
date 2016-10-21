@@ -4,9 +4,9 @@ import json
 class PermalinkJsonHandler(Handler):
 	def get(self, post_id) :
 		# create key from id
-		key = db.Key.from_path('Blog', int(post_id))
+		# key = db.Key.from_path('Blog', int(post_id))
 		# obtain the model from the key
-		post = db.get(key)
+		post = Blog.get_permalink(post_id, True)
 		if not post:
 		    self.write("ERRROR 404 NOT FOUND THIS PAGE WAS NOT FOUND IN THIS SERVER")
 		    return

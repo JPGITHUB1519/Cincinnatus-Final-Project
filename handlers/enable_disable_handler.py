@@ -20,7 +20,7 @@ class EnableDisableHandler(Handler):
 			post_id = data["post_id"]
 		if not error :
 			response = {}
-			post = post_by_id(post_id)
+			post = Blog.post_by_id(post_id)
 			if post : 
 				response["post_id"] = post_id
 				if post.status == True :
@@ -33,7 +33,7 @@ class EnableDisableHandler(Handler):
 				# this is a force change it!
 				#memcache.flush_all()
 				post.put()
-				get_posts(True)
+				Blog.get_posts(True)
 				self.write(json.dumps(response))
 			else :
 				response = {"error" : "This Post was not found in the database"}
