@@ -157,19 +157,13 @@ def numdata_comments_all_post():
         dic[str(post.key().id())].append(post)
     return dic
 
+def numcomments_all_category() :
+    dic = {}
+    category = get_category()
+    for cat in category :
+        dic[cat.key().id()] = Comment.all().filter("post.category =", cat.key()).ancestor(ancestor_key).count()
+    return dic
 
-def hottest_posts(hootest_dic, num) :
-    """
-        return dic["post_id" : num_comments]
-        Returns the number of Comments  of The Hottets each Post 
-    """
-    return dict(sorted(hootest_dic.iteritems(), key=operator.itemgetter(1), reverse=True)[:num])
-
-def sort_dictionary_desc(dic) :
-    """ 
-        Return a Tuple with the dic Sorted
-    """
-    return sorted(dic.items(), key = operator.itemgetter(1), reverse = True)
 # post actions
 def post_by_category(category):
     """
@@ -308,10 +302,35 @@ def count_comments_by_post(post_id) :
     key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
     return Comment.all().filter("post =", key).count()
 
+def count_comments_by_category(comments_by_topic) :
+    logging.error(comments_by_topic)
+    dic = {}
+    category = get_category()
+    for cat in category :
+        posts = post_by_category(cat)
+        cont = 0
+        for post in posts :
+            cont += comments_by_topic[str(post.key().id())][0]
+        dic[str(cat.key().id())] = [cont, cat]
+    return dic
+
+def hottest_dic(hootest_dic, num) :
+    """
+        like select top  
+    """
+    return dict(sorted(hootest_dic.iteritems(), key=operator.itemgetter(1), reverse=True)[:num])
+
+def sort_dictionary_desc(dic) :
+    """ 
+        Return a Tuple with the dic Sorted
+    """
+    return sorted(dic.items(), key = operator.itemgetter(1), reverse = True)
 
 # date to string
 def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
+
+
 
 # mailgun
 def send_mailgun_complex_message(recipient, subject, html):

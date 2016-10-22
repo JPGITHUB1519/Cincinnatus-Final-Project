@@ -3,8 +3,8 @@
 
 {% block content %}
 	<div class="content box" style="padding: 26px;">
-		<h2 class="text-center">Hottest Topics</h2>
-		{% for post in dic_hottest_posts %}
+		<h2 class="text-center">Hottest Post</h2>
+		{% for post in hottest_posts %}
 			<div class="row" id="blog-header">
 				<div class="col-md-1 date text-center visible-only-large">
 					<p>{{ post[1][1].date }}</p>
@@ -34,6 +34,14 @@
 				</div>
 			</div>
 			<!--<span style="position : absolute; bottom : 0; color : red; font-size : 1.5em;">{{ QUERIED }}</span> -->
+		{% endfor %}
+		<h2 class="text-center">Hottest Categories</h2>
+		{% for category in hottest_category %}
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="text-center text-info">{{ category[1][1].name }}<span>({{ category[1][0] }})</span></h3>
+				</div>
+			</div>
 		{% endfor %}
 	</div>
 {% endblock %}
