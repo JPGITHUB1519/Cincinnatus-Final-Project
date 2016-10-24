@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %} Permalink {% endblock %}
 {% block content %}
+	<input type="hidden" id="user_session" value="{{ user_key }}">
+	<input type="hidden" id="post_id" value="{{ p.key().id() }}">
 	<div class="row">
 		<div class="col-md-1 date text-center visible-only-large">
 			<p>Sept</p>
@@ -61,8 +63,42 @@
 						<p>{{ comment.content}}</p>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-1 text-center">
+						<!-- <a href="javascript:report_comment('{{ p.key().id() }}', '{{comment.key().id()}}');" value="{{ comment.key().id() }}" class="error-text report", >Reportar</a> -->
+						<a data-comment="{{ comment.key().id() }}" class="error-text reporter">Report</a>
+					</div>
+				</div>
 			</div>
 		{% endfor %}
+	</div>
+	
+	<!-- report dialog -->
+	<div id="report_modal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+			<!-- Modal Content -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title error-text">Report Comment</h4>
+				</div>
+				<div class="modal-body">
+					<form>
+						<div class="centered-form">
+							<label class="control-label">Reason</label>
+							<textarea class="form-control" id="report_text" data-comment = ""></textarea>
+							<input class="btn btn-danger center-block-only-small center-block little-margin-top" type="submit" value="Report" id="report_button">
+							<h3 class="error-text text-center" id="error_reason"></h3>
+							<h3 class="error-text text-center" id="error_report"></h3>
+						</div>
+						<h3 id="update_error" class="error-text text-center"></h3>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button id="close_report_modal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<!-- <span style="position : absolute; bottom : 0; color : red; font-size : 1.5em;" class="fixed">{{ QUERIED }}</span> -->
@@ -98,6 +134,45 @@
 			})
 		}
 
+		function report_comment(post_id, comment_id, user_id, reason)
+		{	
+			$.ajax(
+			{
+				type : "POST",
+				url : "/" + post_id,
+				contentType : "application/json",
+				datatype : "json",
+				data : JSON.stringify({"comment_id" : comment_id, "user_id" : user_id, "reason" : reason, "action" : "report"})
+			})
+			.done(function(response)
+			{
+				var cond_error = false;
+				if(response["error_comment"])
+				{
+					$("#error_reason").text(response["error_comment"]);
+					cond_error = true;
+				}
+				if(response["error"])
+				{
+					$("#error_report").text(response["error_report"]);
+					cond_error = true;
+				}
+				// if there was no error
+				if (cond_error == false)
+				{
+					console.log(response);
+					$('#report_modal').modal('toggle');
+					$('#report_text').val("");
+					$('#error_reason').text("");
+					$('#error_report').text("");
+				}	
+			})
+			.fail(function(textStatus)
+			{
+				console.log(textStatus);
+			});
+		}
+
 		$(document).ready(function()
 		{
 			$("#btn_submit_comment").click(function(e)
@@ -109,6 +184,36 @@
 				insert_comment(post_id, subject, content);
 			});
 
+			$(document).on("click", '.reporter', function (e) 
+			{
+				// open modal
+				e.preventDefault();
+				$("#report_modal").modal();
+				// add the data of the comment to the textarea
+				$('#report_text').attr("data-comment", $(this).data("comment"));
+			});
+
+			// report button comment
+			$("#report_button").click(function(e)
+			{
+				e.preventDefault();
+				// take idcomment, user_reporter, reason
+				var idcomment = $("#report_text").data("comment");
+				// getting the actual user by the hidden input
+				var user_reporter = $("#user_session").val();
+				var reason = $("#report_text").val();
+				var post_id = $("#post_id").val();
+				// call ajax call 
+				report_comment(post_id, idcomment, user_reporter, reason);
+			});
+
+			$("#close_report_modal").click(function(e)
+			{
+				e.preventDefault();
+				$('#report_text').val("");
+				$('#error_reason').text("");
+				$('#error_report').text("");
+			});
 		});
 	</script>
 {% endblock %}

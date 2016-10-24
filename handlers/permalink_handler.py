@@ -1,6 +1,7 @@
 from basic_handler import *
 from main_handler import *
 from models.comment_model import *
+from models.report_model import *
 from utility import *
 import time
 import json
@@ -29,17 +30,23 @@ class PermalinkHandler(MainHandler):
                     self.write("ERRROR 404 NOT FOUND THIS PAGE WAS NOT FOUND IN THIS SERVER")
                     return
                 QUERIED =  "queried %s seconds ago" % int(query_time)
-                self.render("permalink.html", p = post, QUERIED = QUERIED, comments = comments, total_comments = total_comments)
+                self.render("permalink.html", p = post, 
+                                              QUERIED = QUERIED, 
+                                              comments = comments, 
+                                              total_comments = total_comments, 
+                                              user_key = self.user.key().id(),
+                                              username = self.user.username)
 
     def post(self, post_id):
         self.response.headers['Content-Type'] = "application/json"
         data = json.loads(self.request.body)
-        subject = data["subject"]
-        content = data["content"]
         action = data["action"]
         response = {"status" : "ok"}
         cond_error = False
         if action == "insert" :
+            subject = data["subject"]
+            content = data["content"]
+            action = data["action"]
             if not subject :
                 response["status"] = "error"
                 response["error_subject"] = "You must fill the subject"
@@ -63,4 +70,19 @@ class PermalinkHandler(MainHandler):
                                     "user_id" : int(self.user.key().id()),
                                     "total_comments" : total_comments}
                 logging.error(total_comments)
+        if action == "report" :
+            comment_key = db.Key.from_path('Comment', data["comment_id"])
+            user_reporter_key = db.Key.from_path('Comment', data["user_id"])
+            reason = data["reason"]
+            if not reason :
+                response["error_comment"] = "You Must Fill The Reason"
+                cond_error = True
+            if not comment_key and not user_reporter_key :
+                response["error"] = "An Unexpected Error Ocurred"
+            if not cond_error :
+                # report comment!
+                reporte = Report(user_reporter = user_reporter_key, 
+                                comment = comment_key, 
+                                reason = reason, parent = ancestor_key)
+                reporte.put()
         self.write(json.dumps(response))
