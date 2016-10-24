@@ -28,14 +28,16 @@ class NewpostHandler(Handler) :
 									subject = post.subject, 
 									content = post.content,
 									category = post.category,
-									username = self.user.username)
+									username = self.user.username,
+									user_key = self.user.key().id())
 					else :
 						self.render("newpost.html", 
 									category_list = category_list,
 									subject = "",
 									content = "",
 									category = "", 
-									username = self.user.username)
+									username = self.user.username,
+									user_key = self.user.key().id())
 				else :
 					self.write("You have not Permission to access this page because you are a only reader User")
 
@@ -74,7 +76,8 @@ class NewpostHandler(Handler) :
 										content  = content,
 										category = category,
 										category_list = category_list,
-										username = self.user)
+										username = self.user,
+										user_key = self.user.key().id())
 
 	def check_get_category(self, category, new_category):
 		""""
