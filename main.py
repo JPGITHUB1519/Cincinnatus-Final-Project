@@ -35,6 +35,7 @@ from handlers.post_categorizer_handler import *
 from handlers.post_sensation_handler import *
 from handlers.administration_handler import *
 from handlers.admin_category_handler import *
+from handlers.hottest_handler import *
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -56,5 +57,6 @@ app = webapp2.WSGIApplication([
     ("/post_categorizer", PostCategorizerHandler),
     ("/post_sensation/?", PostSensationHandler),
     ("/administration", AdministrationHandler),
-    ("/admin_category", AdminCategoryHandler)
+    ("/administration/category", AdminCategoryHandler),
+    ("/administration/hottest", HottestPost)
 ], debug=True)

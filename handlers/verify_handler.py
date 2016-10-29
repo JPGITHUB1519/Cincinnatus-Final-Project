@@ -19,4 +19,3 @@ class VerifyHandler(Handler):
 					self.write("Error Verificando")
 
 
-

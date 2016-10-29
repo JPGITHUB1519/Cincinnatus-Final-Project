@@ -21,6 +21,7 @@ class MainHandler(Handler):
 								lista_post = lista_post, 
 								QUERIED = QUERIED, 
 								username = self.user.username,
-								list_categories = list_categories)
+								list_categories = list_categories,
+								user_key = self.user.key().id())
 				else :
 					self.write("You have not Permission to access this page because you are a only Writer User")

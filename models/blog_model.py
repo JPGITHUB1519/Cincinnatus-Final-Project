@@ -16,4 +16,3 @@ class Blog(db.Model) :
 	users_liked = db.ListProperty(db.Key, default = [])
 	dislikes = db.IntegerProperty(default = 0)
 	users_disliked = db.ListProperty(db.Key, default = [])
-

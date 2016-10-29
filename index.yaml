@@ -22,3 +22,10 @@ indexes:
   - name: status
   - name: date
     direction: desc
+
+- kind: Comment
+  ancestor: yes
+  properties:
+  - name: post
+  - name: date
+    direction: desc

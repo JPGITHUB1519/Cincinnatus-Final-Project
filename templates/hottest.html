@@ -1,0 +1,48 @@
+{% extends "administration_base.html" %}
+{% block title %} Admin Hottest{% endblock %}
+
+{% block content %}
+	<div class="content box" style="padding: 26px;">
+		<h2 class="text-center">Hottest Post</h2>
+		{% for post in hottest_posts %}
+			<div class="row" id="blog-header">
+				<div class="col-md-1 date text-center visible-only-large">
+					<p>{{ post[1][1].date }}</p>
+				</div>
+				<div class="col-md-10">
+					<h1 class="text-beatiful-red font-lobster">{{ post[1][1].subject }}</h1>
+				</div>
+			</div>
+
+			<div class="row" id="blog-data">
+				<div class="col-sm-6">
+					<p class="font-pacifico text-semi-large text-center-only-small" >Written By {{ post[1][1].user.username }}</p>
+				</div>
+				<div class="col-sm-6">
+					<p class="text-semi-large text-beatiful-blue text-center-only-small">Category : <span class="text-black">{{ post[1][1].category.name }}</span></p>
+				</div>	
+			</div>
+
+			<div class="row" id="blog-content">
+				<div class="col-md-12">
+					<p>{{ post[1][1].content }}</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<p class="text-info">#Comments : {{ post[1][0] }}</p> 
+				</div>
+			</div>
+			<!--<span style="position : absolute; bottom : 0; color : red; font-size : 1.5em;">{{ QUERIED }}</span> -->
+		{% endfor %}
+		<h2 class="text-center">Hottest Categories</h2>
+		{% for category in hottest_category %}
+			<div class="row">
+				<div class="col-md-12">
+					<h3 class="text-center text-info">{{ category[1][1].name }}<span>({{ category[1][0] }})</span></h3>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% endblock %}
+

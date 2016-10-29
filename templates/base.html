@@ -6,14 +6,15 @@
 	<link rel="stylesheet" type="text/css" href="/static/css/vendor/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
 	<script type="text/javascript" src="/static/js/vendor/jquery-3.1.0.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.4/Chart.bundle.min.js"></script>
 </head>
 <body>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-offset-10 col-md-2 col-xs-offset-8 col-xs-4" id ="user-data">
-				<span class="visible float-left">User : <a href="/admin">{{ username }}</a></span>
-				<span class="visible float-right"><a href="/logout">Logout</a></span>
+				<span class="visible float-left"><img src="/img_serve/{{user_key}}" class="img-user "> <a href="/admin">{{ username }}</a></span>
+				<span class="visible float-right very-little-margin-top-px"><a href="/logout">Logout</a></span>
 			</div>
 		</div>
 		<div class="row header">

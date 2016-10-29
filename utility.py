@@ -7,6 +7,7 @@ import hashlib
 import logging
 import time
 import os
+import operator
 # Import the email modules
 import smtplib
 from email.mime.text import MIMEText
@@ -19,6 +20,7 @@ from general import *
 from google.appengine.api import mail
 from urllib import urlencode
 from libs import httplib2
+from models.comment_model import *
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
 from google.appengine.api import memcache
@@ -109,6 +111,58 @@ def get_posts_whithout_status(update = False) :
         # updating cache
         memcache.set(key, posts)
     return posts
+
+def get_comments_by_post(post_id, update = False) :
+    """ 
+        Get All Comments of a specified Post
+    """
+    # GETTING KEY BY
+    post_key = key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
+    # each comment has a different space in memcache
+    key = "comments_by_post_" + str(post_key)
+    comments = memcache.get(key)
+    if comments is None or update :
+        comments = Comment.all().order("-date").filter("post =", post_key).ancestor(ancestor_key)
+        comments = list(comments)
+        memcache.set(key, comments)
+    return comments
+
+
+def num_comments_by_post(post_id) :
+    post_key = key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
+    num_comments = Comment.all().filter("post =", post_key).ancestor(ancestor_key).count()
+    return num_comments
+
+def num_comments_all_post():
+    """
+        return dic["post_id" : num_comments]
+        Returns the number of Comments  of each Post 
+    """
+    dic = {}
+    posts = get_posts()
+    for post in posts :
+        dic[str(post.key().id())] = num_comments_by_post(post.key().id())
+    return dic
+
+def numdata_comments_all_post():
+    """
+        return dic["post_id" : [num_comments, data]]
+        Returns the number of Comments  of each Post and the data
+    """
+    dic = {}
+    posts = get_posts()
+    for post in posts :
+        dic[str(post.key().id())] = []
+        dic[str(post.key().id())].append(num_comments_by_post(post.key().id()))
+        dic[str(post.key().id())].append(post)
+    return dic
+
+def numcomments_all_category() :
+    dic = {}
+    category = get_category()
+    for cat in category :
+        dic[cat.key().id()] = Comment.all().filter("post.category =", cat.key()).ancestor(ancestor_key).count()
+    return dic
 
 # post actions
 def post_by_category(category):
@@ -237,9 +291,45 @@ def get_users_by_emails(email):
     data = User.all().filter('email =', email).ancestor(ancestor_key)
     return data
 
+# comments stuff
+def insert_comment(subject, content, post, user) :
+    comentario = Comment(user = user, post = post, subject = subject, content = content, parent = ancestor_key )
+    comentario.put()
+    get_comments_by_post(comentario.post.key().id(), True)
+    return comentario
+
+def count_comments_by_post(post_id) :
+    key = db.Key.from_path('Blog', int(post_id), parent  = ancestor_key)
+    return Comment.all().filter("post =", key).count()
+
+def count_comments_by_category(comments_by_topic) :
+    logging.error(comments_by_topic)
+    dic = {}
+    category = get_category()
+    for cat in category :
+        posts = post_by_category(cat)
+        cont = 0
+        for post in posts :
+            cont += comments_by_topic[str(post.key().id())][0]
+        dic[str(cat.key().id())] = [cont, cat]
+    return dic
+
+def hottest_dic(hootest_dic, num) :
+    """
+        like select top  
+    """
+    return dict(sorted(hootest_dic.iteritems(), key=operator.itemgetter(1), reverse=True)[:num])
+
+def sort_dictionary_desc(dic) :
+    """ 
+        Return a Tuple with the dic Sorted
+    """
+    return sorted(dic.items(), key = operator.itemgetter(1), reverse = True)
+
 # date to string
 def date_to_string(date):
     return date.strftime('%a %b %m %X %Y')
+
 
 
 # mailgun
