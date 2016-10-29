@@ -1,0 +1,58 @@
+{% extends "administration_base.html" %}
+{% block title %}Comment List{% endblock %}
+
+{% block content %}
+	<div class="content box">
+		<h2 class="text-center little-padding">Comments List</h2>
+		<div class="row" id="blog-header">
+			<div class="col-md-1 date text-center visible-only-large">
+				<p>{{ p.date }}</p>
+			</div>
+			<div class="col-md-10">
+				<h1 class="text-beatiful-red font-lobster">{{ p.subject }}</h1>
+			</div>
+		</div>
+
+		<div class="row" id="blog-data">
+			<div class="col-sm-6">
+				<p class="font-pacifico text-semi-large text-center-only-small" >Written By {{ p.user.username}}</p>
+			</div>
+			<div class="col-sm-6">
+				<p class="text-semi-large text-beatiful-blue text-center-only-small">Category : <span class="text-black">{{ p.category.name }}</span></p>
+			</div>	
+		</div>
+
+		<div class="row" id="blog-content">
+			<div class="col-md-12">
+				<p>{{ p.content }}</p>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<td>Subject</td>
+						<td>Comment</td>
+						<td>User</td>
+						<td>Date</td>
+						<td>Edit</td>
+						<td>Delete</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for data in list_comments %}
+						<tr>
+							<td>{{ data.subject }}</td>
+							<td>{{ data.content }}</td>
+							<td>{{ data.user.username }}</td>
+							<td>{{ data.date }}</td>
+							<td><a href="">Edit</a></td>
+							<td><a href="">Delete</a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+{% endblock %}

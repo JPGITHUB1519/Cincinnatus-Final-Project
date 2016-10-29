@@ -17,7 +17,6 @@ class PermalinkHandler(MainHandler):
             else :
                 comments = get_comments_by_post(post_id)
                 total_comments = count_comments_by_post(post_id)
-                logging.error(total_comments)
             	update = self.request.get("p")
             	# if update is true query the cache and show the new post else load from cache
             	if update == "true" :
