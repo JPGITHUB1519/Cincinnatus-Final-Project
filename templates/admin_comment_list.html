@@ -156,7 +156,6 @@
 				{
 					$("#update_content_error").text('');
 				}
-
 				if(cond_error == false)
 				{
 					// updating value in grid and closing modal
@@ -165,7 +164,8 @@
 					var id_col_subject = "#col_subject_" + comment_id;
 					var id_col_content = "#col_content_" + comment_id;
 					$(id_col_subject).text(new_subject);
-					$(id_col_content).text(new_content);	
+					$(id_col_content).text(new_content);
+					console.log(id_col_content);	
 					$('#update_comment_modal').modal('hide');
 				}
 			})
@@ -215,8 +215,8 @@
 				var text_update_subject = $("#text_update_subject").val();
 				var text_update_content = $("#text_update_content").val();
 				var comment_key = $("#new_category_name").data("category-key");
-				console.log(text_update_subject)
-				console.log(text_update_content)
+				console.log(text_update_subject);
+				console.log(text_update_content);
 				update_comment(comment_id, text_update_subject, text_update_content);
 			});
 

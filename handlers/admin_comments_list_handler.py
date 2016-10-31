@@ -21,13 +21,11 @@ class AdminCommentsListHandler(Handler) :
 		cond_error = False
 		error_subject = "You Must Fill the Subject"
 		error_content = "You Must Fill the Content"
-
 		if action == "delete_comment" :
 			comment_entity = comment_by_id(comment_id)
 			if comment_entity :
 				comment_entity.delete()
 				get_comments_by_post(post_id, True)
-
 		if action == "update_comment" :
 			subject = data["subject"]
 			content = data["content"]
@@ -44,4 +42,6 @@ class AdminCommentsListHandler(Handler) :
 					comment_entity.content = content
 					comment_entity.put()
 					get_comments_by_post(post_id, True)
+					response["subject"] = subject
+					response["content"] = content
 		self.write(json.dumps(response))
