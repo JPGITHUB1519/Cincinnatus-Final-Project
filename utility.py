@@ -21,6 +21,7 @@ from google.appengine.api import mail
 from urllib import urlencode
 from libs import httplib2
 from models.comment_model import *
+from models.report_model import *
 ancestor_key = db.Key.from_path('User', 'some_id')
 # import memchache
 from google.appengine.api import memcache
@@ -325,6 +326,23 @@ def sort_dictionary_desc(dic) :
         Return a Tuple with the dic Sorted
     """
     return sorted(dic.items(), key = operator.itemgetter(1), reverse = True)
+
+### ------- Reports ---------###
+def get_reports(update = False) :
+    """ 
+        Obtain all reporsts
+    """
+    # using the global variable query time
+    key = "report"
+    reports = memcache.get(key)
+    if reports is None or update :
+        logging.error("DBQUERY")
+        reports = Report.all().ancestor(ancestor_key)
+        reports = list(reports) 
+        # updating cache
+        memcache.set(key, reports)
+    logging.error(reports)
+    return reports
 
 # date to string
 def date_to_string(date):

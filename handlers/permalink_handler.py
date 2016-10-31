@@ -17,7 +17,6 @@ class PermalinkHandler(MainHandler):
             else :
                 comments = get_comments_by_post(post_id)
                 total_comments = count_comments_by_post(post_id)
-                logging.error(total_comments)
             	update = self.request.get("p")
             	# if update is true query the cache and show the new post else load from cache
             	if update == "true" :
@@ -71,8 +70,8 @@ class PermalinkHandler(MainHandler):
                                     "total_comments" : total_comments}
                 logging.error(total_comments)
         if action == "report" :
-            comment_key = db.Key.from_path('Comment', data["comment_id"])
-            user_reporter_key = db.Key.from_path('Comment', data["user_id"])
+            comment_key = db.Key.from_path('Comment', data["comment_id"], parent  = ancestor_key)
+            user_reporter_key = db.Key.from_path('User', data["user_id"], parent = ancestor_key)
             reason = data["reason"]
             if not reason :
                 response["error_comment"] = "You Must Fill The Reason"
