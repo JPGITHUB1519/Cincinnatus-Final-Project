@@ -1,0 +1,1 @@
+http://stackoverflow.com/questions/5145200/one-javascript-file-per-page-or-combine-when-using-jquery-and-document-ready-fun
