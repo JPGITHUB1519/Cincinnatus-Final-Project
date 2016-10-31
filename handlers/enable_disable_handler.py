@@ -33,7 +33,7 @@ class EnableDisableHandler(Handler):
 				# this is a force change it!
 				#memcache.flush_all()
 				post.put()
-				get_posts(True)
+				get_posts_whithout_status(True)
 				self.write(json.dumps(response))
 			else :
 				response = {"error" : "This Post was not found in the database"}

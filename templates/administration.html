@@ -28,11 +28,16 @@
 							<td>Category</td>
 							<td>Update</td>
 							<td>Disable</td>
+							<td>Disable</td>
 						</tr>
 					</thead>
 					<tbody>
 						{% for data in list_posts %}
-							<tr>
+							{% if data.status == True %}
+								<tr class="good-panel" id="row_{{ data.key().id()}}">
+							{% else %}
+								<tr class="error-panel" id = "row_{{ data.key().id()}}">
+							{% endif %}
 								<td>{{ data.subject }}</td>
 								<td>{{ data.content }}</td>
 								<td>{{ data.user.username }}</td>
@@ -132,6 +137,7 @@
 			.done(function(data)
 			{
 				var link_id = "#" + post_id 
+				var row_id = "#row_" + post_id;
 				console.log(data["status"]);
 				//json_reponse
 				if(data["status"] == "true")
@@ -141,11 +147,18 @@
 					$(link_id).addClass("little-text");
 					// quit focus when ajax
 					$(link_id).blur();
+					console.log(row_id);
+					// changing row color
+					$(row_id).addClass("good-panel");
+					$(row_id).removeClass("error-panel");
 				}
 				else if(data["status"] == "false")
 				{
 					$(link_id).text("Enable");
 					$(link_id).removeClass("error-text");
+					// changing row color
+					$(row_id).addClass("error-panel");
+					$(row_id).removeClass("good-panel")
 					$(link_id).blur();
 				}
 			})
