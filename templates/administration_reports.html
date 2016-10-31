@@ -1,0 +1,38 @@
+{% extends "administration_base.html" %}
+{% block title %}Admin - Reports {% endblock %}
+
+{% block content %}
+	<div class="content box">
+		<h1 class="text-center little-padding">Reports</h1>
+		<div class="table-responsive">
+				<table class="table">
+					<thead>
+						<thead>
+							<tr>
+								<td>Content</td>
+								<td>Written by</td>
+								<td>Reported by</td>
+								<td>Publication date</td>
+								<td>Report Date</td>
+								<td>Reason</td>
+								<td>Actions</td>
+							</tr>
+						</thead>
+						<tbody>
+
+							{% for report in reports_list %}
+								<tr>
+									<td>{{ report.comment.content }}</td>
+									<!-- <td>{{ report.comment.user.username }}</td>  -->
+									<!-- <td>{{ report.user_reporter.username }}</td> -->
+									<td>{{ report.comment.date }}</td>
+									<td>{{ report.date }}</td>
+									<td>{{ report.reason}}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</thead>
+				</table>
+			</div>
+		</div>
+{% endblock %}
