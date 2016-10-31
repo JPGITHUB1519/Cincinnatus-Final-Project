@@ -1,0 +1,230 @@
+{% extends "administration_base.html" %}
+{% block title %}Comment List{% endblock %}
+
+{% block content %}
+	<!-- post id -->
+	<input type="hidden" name="" value="{{ p.key().id() }}" id="post_id">
+	<!-- comment_id -->
+	<input type="hidden" name="" id="comment_id">
+	<div class="content box">
+		<h2 class="text-center little-padding">Comments List</h2>
+		<div class="row" id="blog-header">
+			<div class="col-md-1 date text-center visible-only-large">
+				<p>{{ p.date }}</p>
+			</div>
+			<div class="col-md-10">
+				<h1 class="text-beatiful-red font-lobster">{{ p.subject }}</h1>
+			</div>
+		</div>
+
+		<div class="row" id="blog-data">
+			<div class="col-sm-6">
+				<p class="font-pacifico text-semi-large text-center-only-small" >Written By {{ p.user.username}}</p>
+			</div>
+			<div class="col-sm-6">
+				<p class="text-semi-large text-beatiful-blue text-center-only-small">Category : <span class="text-black">{{ p.category.name }}</span></p>
+			</div>	
+		</div>
+
+		<div class="row" id="blog-content">
+			<div class="col-md-12">
+				<p>{{ p.content }}</p>
+			</div>
+		</div>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr>
+						<td>Subject</td>
+						<td>Comment</td>
+						<td>User</td>
+						<td>Date</td>
+						<td>Edit</td>
+						<td>Delete</td>
+					</tr>
+				</thead>
+				<tbody>
+					{% for data in list_comments %}
+						<tr id="row_{{ data.key().id() }}">
+							<td id="col_subject_{{ data.key().id()}}">{{ data.subject }}</td>
+							<td id="col_content_{{ data.key().id()}}">{{ data.content }}</td>
+							<td>{{ data.user.username }}</td>
+							<td>{{ data.date }}</td>
+							<td><a href="" class="updater" data-comment_id="{{data.key().id()}}">Edit</a></td>
+							<td><a href="javascript:delete_comment('{{data.key().id()}}');">Delete</a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Edit Comment Modal -->
+			<div id="update_comment_modal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal Content -->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title text-center">Edit Comment</h4>
+						</div>
+						<div class="modal-body">
+							<form>
+								<div class="centered-form">
+									<label class="control-label">Subject</label>
+									<h3 id="update_subject_error" class="error-text text-center"></h3>
+									<input class="form-control" type="text" id="text_update_subject">
+									<label class="control-label">Content</label>
+									<h3 id="update_content_error" class="error-text text-center"></h3>
+									<textarea class="form-control" id="text_update_content"></textarea>
+									<input class="btn btn-default center-block-only-small center-block little-margin-top" type="submit" value="Submit" id="update_button">
+									<h3></h3>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button id="close_updater_modal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+	
+	<script type="text/javascript">
+		function delete_comment(comment_id)
+		{
+			var post_id = $("#post_id").val();
+			$.ajax(
+			{
+				type : "POST",
+				url : "/administration/comment_list/" + post_id,
+				contentType: 'application/json',
+				datatype : "json",
+				// sent json to the server
+				data : JSON.stringify({"comment_id" : comment_id, action  : "delete_comment"}),
+			})
+			.done(function(data)
+			{
+				console.log(data);
+				var status = data["status"];
+				var comment_row_id = "#row_" + comment_id;
+				console.log(comment_row_id)
+				$(comment_row_id).remove();
+				
+				console.log("Exito");
+				
+			})
+			.fail(function(textStatus)
+			{
+				console.log(textStatus);
+			});
+		}
+
+		function update_comment(comment_id, subject, content)
+		{
+			var post_id = $("#post_id").val();
+			$.ajax(
+			{
+				type : "POST",
+				url : "/administration/comment_list/" + post_id,
+				contentType: 'application/json',
+				datatype : "json",
+				// sent json to the server
+				data : JSON.stringify({"comment_id" : comment_id, 
+										"action"  : "update_comment",
+										"subject" : subject,
+										 "content" : content}),
+			})
+			.done(function(data)
+			{
+				console.log(data);
+				var cond_error = false;
+				if('error_subject' in data)
+				{
+					$("#update_subject_error").text(data["error_subject"]);
+					cond_error = true;
+				}
+				else
+				{
+					$("#update_subject_error").text('');	
+				}
+				if("error_content" in data)
+				{
+					$("#update_content_error").text(data["error_content"]);
+					cond_error = true;
+				}
+				else
+				{
+					$("#update_content_error").text('');
+				}
+				if(cond_error == false)
+				{
+					// updating value in grid and closing modal
+					var new_subject = data["subject"];
+					var new_content = data["content"];
+					var id_col_subject = "#col_subject_" + comment_id;
+					var id_col_content = "#col_content_" + comment_id;
+					$(id_col_subject).text(new_subject);
+					$(id_col_content).text(new_content);
+					console.log(id_col_content);	
+					$('#update_comment_modal').modal('hide');
+				}
+			})
+			.fail(function(textStatus)
+			{
+				console.log(textStatus);
+			});
+		}
+
+		function clean_modal()
+		{
+			$("#text_update_subject").val('');
+			$("#text_update_content").val('');
+		}
+
+		$(document).ready(function() 
+		{
+			// Click for Future Links
+			// Delete comment Trigger 
+			$(document).on("click", '.updater', function (e) 
+			{
+				e.preventDefault();
+				// open modal
+				comment_id = $(this).data("comment_id");
+				// keys
+				var id_col_subject = "#col_subject_" + comment_id;
+				var id_col_content = "#col_content_" + comment_id;
+				//valyes
+				var comment_subject = $(id_col_subject).text();
+				var comment_content = $(id_col_content).text();
+				// filling modal with table data
+				$("#text_update_subject").val(comment_subject);
+				$("#text_update_content").val(comment_content);
+				console.log(comment_subject);
+				console.log(comment_content);
+				$("#update_comment_modal").modal();
+				// update hidden comment value
+				$("#comment_id").val(comment_id);
+	
+			});
+
+			// Edit comment Trigger
+			$("#update_button").click(function(e)
+			{
+				e.preventDefault();
+				var comment_id = $("#comment_id").val();
+				var text_update_subject = $("#text_update_subject").val();
+				var text_update_content = $("#text_update_content").val();
+				var comment_key = $("#new_category_name").data("category-key");
+				console.log(text_update_subject);
+				console.log(text_update_content);
+				update_comment(comment_id, text_update_subject, text_update_content);
+			});
+
+			$("#close_updater_modal").click()
+			{
+				clean_modal();
+			}
+		});
+		
+	</script>
+{% endblock %}

@@ -292,6 +292,10 @@ def get_users_by_emails(email):
     return data
 
 # comments stuff
+def comment_by_id(comment_id) :
+    comment_entity = Comment.get_by_id(int(comment_id), parent = ancestor_key)
+    return comment_entity
+
 def insert_comment(subject, content, post, user) :
     comentario = Comment(user = user, post = post, subject = subject, content = content, parent = ancestor_key )
     comentario.put()
