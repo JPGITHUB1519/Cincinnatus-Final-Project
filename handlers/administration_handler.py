@@ -14,3 +14,4 @@ class AdministrationHandler(Handler):
 				dic_posts = numpost_all()
 				list_posts = get_posts_whithout_status()
 				self.render("administration.html", username = self.user.username, data_json = json.dumps(dic_posts), dic_posts = dic_posts, list_posts = list_posts)
+	
