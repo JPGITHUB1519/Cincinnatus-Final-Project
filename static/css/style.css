@@ -294,7 +294,16 @@ ul#nav li a:hover
 {
     position: fixed;
 }
-
+.error-panel
+{
+    background: rgba(210, 14, 53, 0.92) !important;
+    color: white !important;
+}
+.good-panel
+{
+    background-color: #f5f5f5 !important;
+    color: black !important;
+}
 /* ==========================================================================
    Tables
    ========================================================================== 
