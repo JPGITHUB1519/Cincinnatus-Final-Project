@@ -28,7 +28,7 @@
 							<td>Category</td>
 							<td>Update</td>
 							<td>Disable</td>
-							<td>Disable</td>
+							<td>Delete</td>
 						</tr>
 					</thead>
 					<tbody>
@@ -49,6 +49,7 @@
 								{% else %}
 									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
 								{% endif %}
+								<td><a href="" id="delete_link_{{ data.key().id()}}">Delete</a></td>
 							</tr>
 						{% endfor %}
 					</tbody>
@@ -167,6 +168,27 @@
 				console.log(textStatus);
 			});
 			return;
+		}
+
+		function delete_post(post_id)
+		{
+			$.ajax(
+			{
+				type : "POST",
+				url : "/administration",
+				contentType: 'application/json',
+				datatype : "json",
+				// sent json to the server
+				data : JSON.stringify({"post_id" : post_id, "action" : "delete_post"}),
+			})
+			.done(function(data)
+			{
+				console.log(data);
+			})
+			.fail(function(textStatus)
+			{
+				console.log(textStatus);
+			});	
 		}
 	</script>
 
