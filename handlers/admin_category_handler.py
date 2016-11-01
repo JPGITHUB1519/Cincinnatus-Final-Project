@@ -4,7 +4,7 @@ import json
 class AdminCategoryHandler(Handler):
 	def get(self):
 		category_list = get_category()
-		self.render("admin_category.html", category_list = category_list)
+		self.render("administration_category.html", category_list = category_list)
 
 	def post(self):
 		# category_name = self.request.get("category_name")
