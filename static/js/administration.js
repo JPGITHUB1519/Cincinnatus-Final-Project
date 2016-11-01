@@ -12,13 +12,15 @@ function enable_disable_ajax(post_id)
 	})
 	.done(function(data)
 	{
-		var link_id = "#" + post_id 
+		var link_id = "#" + post_id
+		var enable_disable_img = "#enable_disable_img_" + post_id; 
 		var row_id = "#row_" + post_id;
 		console.log(data["status"]);
+		console.log(enable_disable_img)
 		//json_reponse
 		if(data["status"] == "true")
 		{
-			$(link_id).text("Disable");
+			$(enable_disable_img).attr("src", "/static/images/disable-icon.png");
 			$(link_id).addClass("error-text");
 			$(link_id).addClass("little-text");
 			// quit focus when ajax
@@ -30,7 +32,7 @@ function enable_disable_ajax(post_id)
 		}
 		else if(data["status"] == "false")
 		{
-			$(link_id).text("Enable");
+			$(enable_disable_img).attr("src", "/static/images/enable-icon.png");
 			$(link_id).removeClass("error-text");
 			// changing row color
 			$(row_id).addClass("error-panel");
