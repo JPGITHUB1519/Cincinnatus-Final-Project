@@ -184,6 +184,12 @@
 			.done(function(data)
 			{
 				console.log(data);
+				
+				// deleting post from the grid
+				var row_id = "#row_" + post_id;
+				console.log(row_id)
+				$(row_id).remove();
+					
 			})
 			.fail(function(textStatus)
 			{

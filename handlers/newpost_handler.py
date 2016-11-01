@@ -59,6 +59,7 @@ class NewpostHandler(Handler) :
 				post.put()
 				# Updating the Cache when writing
 				get_posts(True)
+				get_posts_whithout_status(True)
 				# redirecting with the key of the new post
 				self.redirect('/%s' % str(post.key().id()) + "?p=true")
 			else :
@@ -67,6 +68,7 @@ class NewpostHandler(Handler) :
 				post.put()
 				# Updating the Cache when writing
 				get_posts(True)
+				get_posts_whithout_status(True)
 				# redirecting with the key of the new post
 				self.redirect('/%s' % str(post.key().id()))
 		else :
