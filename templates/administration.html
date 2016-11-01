@@ -49,7 +49,7 @@
 								{% else %}
 									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
 								{% endif %}
-								<td><a href="" id="delete_link_{{ data.key().id()}}">Delete</a></td>
+								<td><a href="javascript:delete_post('{{data.key().id()}}')" id="delete_link_{{ data.key().id()}}">Delete</a></td>
 							</tr>
 						{% endfor %}
 					</tbody>

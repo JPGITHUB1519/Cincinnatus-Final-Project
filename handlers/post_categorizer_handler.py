@@ -10,7 +10,7 @@ class PostCategorizerHandler(Handler):
 
 	def post(self):
 		self.response.headers['Content-Type'] = 'application/json'
-		data = json.loads(self.request.body);
+		data = json.loads(self.request.body)
 		category = category_by_id(data["category_id"])
 		post_list = post_by_category(category)
 		logging.error(post_list)

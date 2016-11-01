@@ -226,6 +226,11 @@ def numpost_by_categories(user):
         return data
     else :
         return None
+
+def delete_comments_cascade_bypost(post_key) :
+    # delete all the coments of a post
+    comments= db.GqlQuery("Select * from Comment WHERE ANCESTOR  IS :1 and post = :2", ancestor_key, post_key).fetch(1000)
+    db.delete(comments)
 #category actions
 def check_exits_category(category_name):
     """"
