@@ -5,7 +5,7 @@ class User(db.Model) :
 	email = db.StringProperty()
 	date = db.DateProperty(auto_now_add=True)
 	# User Group
-	group = db.IntegerProperty(required = True)
+	group = db.IntegerProperty()
 	avatar = db.BlobProperty()
 	avatar_filename = db.StringProperty()
 	status = db.BooleanProperty(default=False)

@@ -22,11 +22,7 @@ class SignupHandler(Handler):
 		username = self.request.get("username")
 		password = self.request.get("password")
 		verify = self.request.get("verify")
-		email = self.request.get("email")
-		group = int(self.request.get("group")) 
-		avatar = self.request.POST.get("pic", None)
-		avatar_filename = avatar.filename
-		avatar_route = self.request.get("image_route")
+		email = self.request.get("email") 
 		# avatar = images.resize(avatar, 32, 32)
 		# error variables
 		error_username = ""
@@ -34,7 +30,6 @@ class SignupHandler(Handler):
 		error_verify = ""
 		error_email = ""
 		error_exits = ""
-		error_group = ""
 		# flag for errors
 		cond_error = False
 		# getting user from database. get for take the first colunn
@@ -47,8 +42,6 @@ class SignupHandler(Handler):
 			if not self.validate_user(username) :
 				error_username = "That's not a Valid User"
 				cond_error = True
-			if not self.validate_group(group) :
-				error_group = "That's not a Valid Group"
 			if not self.validate_password(password):
 				error_password = "That's not a Valid Password"
 				cond_error = True
@@ -64,9 +57,10 @@ class SignupHandler(Handler):
 			# generating password hash
 			password = make_password_hash(username, password)
 			# creating a new instance of the object
-			user = User(username=username, password = password, email = email, group = group, avatar = avatar.file.read(), avatar_filename = avatar_filename)
+			user = User(username=username, password = password, email = email)
 			# saving data in the database
 			user.put()
+			send_mailgun_simple_message(user.email, "hola")
 			self.login(user)
 		else :
 			self.render("signup.html",
@@ -77,8 +71,6 @@ class SignupHandler(Handler):
 							username = username, 
 							email = email,
 							error_exits = error_exits,
-							error_group = error_group,
-							avatar_route = avatar_route
 							)
 
 	# validates functions
