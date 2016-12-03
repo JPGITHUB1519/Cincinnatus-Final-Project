@@ -39,7 +39,9 @@
 		{% for category in hottest_category %}
 			<div class="row">
 				<div class="col-md-12">
-					<h3 class="text-center text-info">{{ category[1][1].name }}<span>({{ category[1][0] }})</span></h3>
+					{% if category[1][0] != 0 %}
+						<h3 class="text-center text-info">{{ category[1][1].name }}<span>({{ category[1][0] }})</span></h3>
+					{% endif %}
 				</div>
 			</div>
 		{% endfor %}

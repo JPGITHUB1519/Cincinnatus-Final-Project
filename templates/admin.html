@@ -22,8 +22,8 @@
 						<td>Content</td>
 						<td>Date</td>
 						<td>Category</td>
-						<td>Update</td>
-						<td>Disable</td>
+						<!-- <td>Update</td>
+						<td>Disable</td> -->
 					</tr>
 				</thead>
 				<tbody>
@@ -33,12 +33,13 @@
 							<td>{{ data.content }}</td>
 							<td>{{ data.date }}</td>
 							<td>{{ data.category.name }}</td>
-							<td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
+
+							<!-- <td><a href="/newpost?p={{data.key().id()}}">Update</a></td>
 							{% if data.status == True %}
 								<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text">Disable</a></td>
 							{% else %}
 								<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}">Enable</a></td>
-							{% endif %}
+							{% endif %} -->
 						</tr>
 					{% endfor %}
 				</tbody>

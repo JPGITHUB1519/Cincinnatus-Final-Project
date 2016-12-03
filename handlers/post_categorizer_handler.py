@@ -23,7 +23,7 @@ class PostCategorizerHandler(Handler):
 				aux_dic["subject"] = post.subject
 				aux_dic["content"] = post.content
 				aux_dic["date"] = str(post.date)
-				aux_dic["category"] = db.to_dict(post.category)   
+				aux_dic["category"] = db.to_dict(post.category)["name"] 
 				aux_dic["username"] = post.user.username
 				aux_dic["last_modified"] = str(post.last_modified)
 				aux_dic["status"] = post.status 

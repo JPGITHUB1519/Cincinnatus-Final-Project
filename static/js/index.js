@@ -37,7 +37,7 @@ function post_by_category_ajax(category_id)
 			$("#blog-header").append(date_content.replace("%data%", json["data"][i]["date"]));
 			$("#blog-header").append(subject_content.replace("%data%", json["data"][i]["subject"]));
 			$("#blog-data").append(username_content.replace("%data%", json["data"][i]["username"]));
-			$("#blog-data").append(category_content.replace("%data%", json["data"][i]["category"]["name"]));
+			$("#blog-data").append(category_content.replace("%data%", json["data"][i]["category"]));
 			$("#blog-content").append(content_content.replace("%data%", json["data"][i]["content"]));
 			}
 		}

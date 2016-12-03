@@ -338,7 +338,7 @@ tbody tr:nth-child(even)
     .sidebar
     {
         width: 25%;
-        height : 100vh;
+        height : 150vh;
         float : left;
         /* this for keep when desktop when do not push the button */
         display: block !important; 
