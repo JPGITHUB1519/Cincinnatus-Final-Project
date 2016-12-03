@@ -19,7 +19,6 @@
 		<div class="table-responsive">
 			<table class="table">
 				<thead>
-					<thead>
 						<tr>
 							<td>Subject</td>
 							<td>Content</td>
@@ -30,31 +29,61 @@
 							<td>Disable</td>
 							<td>Delete</td>
 						</tr>
-					</thead>
-					<tbody>
-						{% for data in list_posts %}
-							{% if data.status == True %}
-								<tr class="good-panel" id="row_{{ data.key().id()}}">
-							{% else %}
-								<tr class="error-panel" id = "row_{{ data.key().id()}}">
-							{% endif %}
-								<td>{{ data.subject }}</td>
-								<td>{{ data.content }}</td>
-								<td>{{ data.user.username }}</td>
-								<td>{{ data.date }}</td>
-								<td>{{ data.category.name }}</td>
-								<td><a href="/newpost?p={{data.key().id()}}"><img src="/static/images/update-icon.png"></a></td>
-								{% if data.status == True %}
-									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text"><img src="/static/images/disable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
-								{% else %}
-									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}"><img src="/static/images/enable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
-								{% endif %}
-								<td><a href="javascript:delete_post('{{data.key().id()}}')" id="delete_link_{{ data.key().id()}}"><img src="/static/images/close-icon.png"></a></td>
-							</tr>
-						{% endfor %}
-					</tbody>
 				</thead>
+				<tbody>
+					{% for data in list_posts %}
+						{% if data.status == True %}
+							<tr class="good-panel" id="row_{{ data.key().id()}}">
+						{% else %}
+							<tr class="error-panel" id = "row_{{ data.key().id()}}">
+						{% endif %}
+							<td>{{ data.subject }}</td>
+							<td>{{ data.content }}</td>
+							<td>{{ data.user.username }}</td>
+							<td>{{ data.date }}</td>
+							<td>{{ data.category.name }}</td>
+							<td class="text-center"><a href="/administration/comment_list/{{data.key().id()}}"><img src="/static/images/comment-icon.png"></a></td>
+							<td class="text-center"><a href="/newpost?p={{data.key().id()}}"><img src="/static/images/update-icon.png"></a></td>
+							{% if data.status == True %}
+								<td class="text-center"><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text"><img src="/static/images/disable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
+							{% else %}
+								<td class="text-center"><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}"><img src="/static/images/enable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
+							{% endif %}
+							<td class="text-center"><a href="javascript:delete_post('{{data.key().id()}}')" id="delete_link_{{ data.key().id()}}"><img src="/static/images/close-icon.png"></a></td>
+						</tr>
+					{% endfor %}
+				</tbody>
 			</table>
+		</div>
+		<!-- Edit Post Modal -->
+		<div id="update_comment_modal" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal Content -->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title text-center">Edit Post</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="centered-form">
+								<label class="control-label">Subject</label>
+								<h3 id="update_subject_error" class="error-text text-center"></h3>
+								<input class="form-control" type="text" id="text_update_subject">
+								<label class="control-label">Content</label>
+								<h3 id="update_content_error" class="error-text text-center"></h3>
+								<textarea class="form-control" id="text_update_content"></textarea>
+								<input class="btn btn-default center-block-only-small center-block little-margin-top" type="submit" value="Submit" id="update_button">
+								<h3>Category</h3>
+								
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button id="close_updater_modal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<script type="text/javascript" src="/static/js/administration.js"></script>

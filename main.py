@@ -37,6 +37,7 @@ from handlers.administration_handler import *
 from handlers.admin_category_handler import *
 from handlers.hottest_handler import *
 from handlers.admin_comments_list_handler import *
+from handlers.admin_reports_handler import *
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -60,5 +61,6 @@ app = webapp2.WSGIApplication([
     ("/administration", AdministrationHandler),
     ("/administration/category", AdminCategoryHandler),
     ("/administration/hottest", HottestPost),
-    ("/administration/comment_list/([0-9]+/?)", AdminCommentsListHandler)
+    ("/administration/comment_list/([0-9]+/?)", AdminCommentsListHandler),
+    ("/administration/reports", AdminReportsHandler)
 ], debug=True)

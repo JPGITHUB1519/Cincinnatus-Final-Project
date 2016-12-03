@@ -1,6 +1,7 @@
 from basic_handler import *
 from main_handler import *
 from models.comment_model import *
+from models.user_model import *
 from models.report_model import *
 from utility import *
 import time
@@ -26,7 +27,7 @@ class PermalinkHandler(MainHandler):
             	key = str(db.Key.from_path('Blog', int(post_id), parent  = ancestor_key))
                 query_time = time.time() - memcache.get(key)[1] 
                 if not post:
-                    self.write("ERRROR 404 NOT FOUND THIS PAGE WAS NOT FOUND IN THIS SERVER")
+                    self.write("ERROR 404 NOT FOUND THIS PAGE WAS NOT FOUND IN THIS SERVER")
                     return
                 QUERIED =  "queried %s seconds ago" % int(query_time)
                 self.render("permalink.html", p = post, 
@@ -70,8 +71,8 @@ class PermalinkHandler(MainHandler):
                                     "total_comments" : total_comments}
                 logging.error(total_comments)
         if action == "report" :
-            comment_key = db.Key.from_path('Comment', data["comment_id"])
-            user_reporter_key = db.Key.from_path('Comment', data["user_id"])
+            comment_key = db.Key.from_path('Comment', data["comment_id"], parent = ancestor_key)
+            user_reporter_key = db.Key.from_path('User', data["user_id"], parent = ancestor_key)
             reason = data["reason"]
             if not reason :
                 response["error_comment"] = "You Must Fill The Reason"

@@ -1,0 +1,32 @@
+{% extends "administration_base.html" %}
+{% block title %}Admin - Reports {% endblock %}
+{% block content %}
+	<div class="content box">
+		<h1 class="text-center">Reports</h1>
+		<div class="table-responsive">
+			<table class="table">
+				<thead>
+					<tr id="table_columns">
+						<td>Comment</td>
+						<td>User Reporter</td>
+						<td>Reason</td>
+						<td>Date</td>
+					</tr>
+				</thead>
+				<tbody id="table_data">
+					{% for data in reports %}
+						<tr>
+							<!-- <td>{{ data.user_reporter.username }}</td> -->
+							<!-- <td>{{ data.comment.content }}</td> -->
+							<td>{{ data.reason }}</td>
+							<td>{{ data.date }}</td>
+							<!-- Trigger Model With A Button -->
+							<!-- <td><a id="updater_{{ data.key()}}" class="updater" data-target="#update_category_modal" data-key-value="{{ data.key() }}">Update</a></td>
+							<td><a id="deleter_{{ data.key() }}" href="javascript:delete_category('{{data.key()}}');" value = "{{ data.key()}}">Delete</a></td> -->
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>		
+		</div>
+	</div>
+{% endblock %}

@@ -29,3 +29,9 @@ indexes:
   - name: post
   - name: date
     direction: desc
+
+- kind: Report
+  ancestor: yes
+  properties:
+  - name: date
+    direction: desc
