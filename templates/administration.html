@@ -26,7 +26,6 @@
 							<td>User</td>
 							<td>Date</td>
 							<td>Category</td>
-							<td>Comments</td>
 							<td>Update</td>
 							<td>Disable</td>
 							<td>Delete</td>
@@ -44,14 +43,13 @@
 								<td>{{ data.user.username }}</td>
 								<td>{{ data.date }}</td>
 								<td>{{ data.category.name }}</td>
-								<td class="text-center"><a href="/administration/comment_list/{{data.key().id()}}"><img src="/static/images/comment-icon.png"></a></td>
-								<td class="text-center"><a href="/newpost?p={{data.key().id()}}"><img src="/static/images/update-icon.png"></a></td>
+								<td><a href="/newpost?p={{data.key().id()}}"><img src="/static/images/update-icon.png"></a></td>
 								{% if data.status == True %}
-									<td class="text-center"><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text"><img src="/static/images/disable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
+									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}" class="error-text little-text"><img src="/static/images/disable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
 								{% else %}
-									<td class="text-center"><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}"><img src="/static/images/enable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
+									<td><a href="javascript:enable_disable_ajax('{{data.key().id()}}');" id="{{data.key().id()}}" value="{{data.key().id()}}"><img src="/static/images/enable-icon.png" id="enable_disable_img_{{data.key().id()}}"></a></td>
 								{% endif %}
-								<td class="text-center"><a href="javascript:delete_post('{{data.key().id()}}')" id="delete_link_{{ data.key().id()}}"><img src="/static/images/close-icon.png"></a></td>
+								<td><a href="javascript:delete_post('{{data.key().id()}}')" id="delete_link_{{ data.key().id()}}"><img src="/static/images/close-icon.png"></a></td>
 							</tr>
 						{% endfor %}
 					</tbody>

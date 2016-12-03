@@ -40,30 +40,6 @@
 					  <p class="error-text">{{ error_email }}</p>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label col-sm-2">Group</label>
-					<div class="col-sm-10">
-						<select name = "group" class="little-padding">
-							<option value="0" selected="selected">0 - Reading</option>
-							<option value="1">1- Writing</option>
-							<option value="2">2- Reading / Writing</option>
-							<option value="3">3- FULL</option>
-						</select>
-					</div>
-					<p class="error-text">{{ error_group }}</p>
-				</div>
-				
-				<div class="form-group">
-					<label class="control-label col-sm-2">Imagen</label>
-					<div class="col-md-10">
-						<img id="image" src="http://placehold.it/250x250" />
-					</div>
-				</div>
-				<div class="form-group">
-					<div class="col-sm-offset-2 col-sm-8">
-						<input type="file" name="pic" accept="image/*" id="files" class="little-padding" value='{{ avatar_route }}'>
-					</div>
-				</div>
 				<div class="form-group"> 
 					<div class="col-sm-offset-2 col-sm-10">
 					  <button type="submit" class="btn btn-default center-block">Submit</button>

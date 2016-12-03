@@ -372,7 +372,7 @@ def send_mailgun_simple_message(recipient, text):
         'from': 'Ninja Blog <mailgun@{}>'.format(MAILGUN_DOMAIN_NAME),
         'to': recipient,
         'subject': 'This is an example email from Mailgun',
-        'html': html
+        'html': text
     }
     resp, content = http.request(url, 'POST', urlencode(data))
     if resp.status != 200:
