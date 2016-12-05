@@ -24,4 +24,10 @@ $(document).ready(function()
 	$("#category").change(function(){
 	    ask_category()
 	});
+
+	$("#btn-submit-post").click(function()
+	{
+		var data_html = CKEDITOR.instances.content.getData();
+		$("#post_content").val(data);
+	});
 });

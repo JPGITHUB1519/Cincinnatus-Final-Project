@@ -4,7 +4,7 @@
 {% block content %}
 
 	<div class="row">
-		<div class="col-xs-12 col-md-6 center-block">
+		<div class="col-xs-12 col-md-7 center-block">
 			<form method="post">
 				<div class="form-group">
 					<label>Subject</label>
@@ -12,12 +12,15 @@
 				</div>
 				<div class="form-group">
 					<label>Content</label>
-					<textarea class="form-control" name = "content">{{ content }}</textarea>
+					<textarea id="post_content" class="form-control" name = "content">{{ content }}</textarea>
+					<script>
+            			CKEDITOR.replace( 'content' );
+        			</script>
 				</div>
 				<div class="row">
 					<div class="col-xs-4">
 						<label class="visible">Category</label>
-						<select name="category" id="category">
+						<select name="category" id="category" class="form-control">
 							{% for category_entity in category_list %}
 								<!-- put default category if it has been taken -->
 								{% if category_entity.name == category.name %}
@@ -36,7 +39,7 @@
 				</div>
 				<div class="row little-margin-top">
 					<div class="col-md-12">
-						<input type="submit" name="" class="btn btn-default center-block">
+						<input id="btn-submit-post" type="submit" name="" class="btn btn-default center-block">
 					</div>
 				</div>
 				<h2 class="text-center error-text">{{ error }}</h2>
