@@ -113,6 +113,31 @@ def get_posts_whithout_status(update = False) :
         memcache.set(key, posts)
     return posts
 
+def get_posts_html_removed(update = False) :
+    """ 
+        The same that get post_without status but this convert the html to text and 
+        takes only the first 250 characters
+    """
+    # using the global variable query time
+    key = "post_nostatus"
+    posts = memcache.get(key)
+    if posts is None or update :
+        logging.error("DBQUERY")
+        # getting post from the database
+        # posts = db.GqlQuery("SELECT  * FROM Blog order by date desc limit 10")
+        posts = Blog.all().order("-date").ancestor(ancestor_key)
+        posts = list(posts)
+        for post in posts :
+            # cleaning html and getting only 150 characters
+            post.content = cleanhtml(post.content)
+            if len(post.content) >= 150 :
+                post.content = post.content[0:150] + "..."
+        # saving the last time query to the database
+        memcache.set("time_last_query", time.time()) 
+        # updating cache
+        memcache.set(key, posts)
+    return posts
+
 def get_comments_by_post(post_id, update = False) :
     """ 
         Get All Comments of a specified Post
@@ -432,3 +457,8 @@ def send_html_email(recipient, subject, html):
     server.starttls()
     server.login(email_sender, email_password)
     server.sendmail(email_password, recipient, msg.as_string())
+
+def cleanhtml(raw_html):
+  cleanr = re.compile('<.*?>')
+  cleantext = re.sub(cleanr, '', raw_html)
+  return cleantext

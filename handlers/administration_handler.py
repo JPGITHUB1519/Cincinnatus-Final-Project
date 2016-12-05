@@ -12,7 +12,7 @@ class AdministrationHandler(Handler):
 			else :
 				# dictionary getting post data by categories
 				dic_posts = numpost_all()
-				list_posts = get_posts_whithout_status()
+				list_posts = get_posts_html_removed()
 				self.render("administration.html", username = self.user.username, data_json = json.dumps(dic_posts), dic_posts = dic_posts, list_posts = list_posts)
 	
 	def post(self):
