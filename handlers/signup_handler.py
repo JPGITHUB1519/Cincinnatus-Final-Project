@@ -57,10 +57,10 @@ class SignupHandler(Handler):
 			# generating password hash
 			password = make_password_hash(username, password)
 			# creating a new instance of the object
-			user = User(username=username, password = password, email = email)
+			user = User(username=username, password = password, email = email, status=True, group = 2)
 			# saving data in the database
 			user.put()
-			send_mailgun_simple_message(user.email, "hola")
+			#send_mailgun_simple_message(user.email, "hola")
 			self.login(user)
 		else :
 			self.render("signup.html",

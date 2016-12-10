@@ -202,6 +202,16 @@ def post_by_user(user):
     post = Blog.all().filter('user =', user.key())
     return list(post)
 
+def post_by_user_quit_html(user):
+    posts = Blog.all().filter('user =', user.key())
+    posts = list(posts)
+    for post in posts :
+        # cleaning html and getting only 150 characters
+        post.content = cleanhtml(post.content)
+        if len(post.content) >= 150 :
+            post.content = post.content[0:150] + "..."
+    return posts
+
 # get post by id
 def post_by_id(id):
     post = Blog.get_by_id(int(id), parent = ancestor_key)
@@ -392,6 +402,8 @@ def date_to_string(date):
 
 
 # mailgun
+# Api key : key-083013c6e0b9c868f9b1f188fd54fb9a
+# sand-box : sandboxc5be1aa9c7be4b0b8683d2078bbd1bfa.mailgun.org
 def send_mailgun_complex_message(recipient, subject, html):
     MAILGUN_API_KEY = "key-083013c6e0b9c868f9b1f188fd54fb9a"
     MAILGUN_DOMAIN_NAME = "sandboxc5be1aa9c7be4b0b8683d2078bbd1bfa.mailgun.org"
@@ -430,6 +442,7 @@ def send_mailgun_simple_message(recipient, text):
             'Mailgun API error: {} {}'.format(resp.status, content))
     return {"resp" : resp, "content" : content}
 
+"""
 def send_simple_email(recipient, subject, text):
     msg = MIMEText(text)
     msg['To'] = recipient
@@ -457,6 +470,7 @@ def send_html_email(recipient, subject, html):
     server.starttls()
     server.login(email_sender, email_password)
     server.sendmail(email_password, recipient, msg.as_string())
+"""
 
 def cleanhtml(raw_html):
   cleanr = re.compile('<.*?>')
